@@ -1,0 +1,17 @@
+{
+    "name": "cs-546-lab-6",
+    "version": "1.0.0",
+    "description": "My lab 6 module",
+    "main": "app.js",
+    "type": "module",
+    "scripts": {
+        "start": "node app.js",
+        "test": "node test/*/*.js"
+    },
+    "author": "Noah Katz 20018850",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.18.2",
+        "mongodb": "^6.2.0"
+    }
+}
