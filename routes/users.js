@@ -48,3 +48,5 @@ router.delete('/users/:userId', async (req, res) => {
        res.status(400).json({error: 'Delete User Route Error'});
       }
 });
+
+export default router;
