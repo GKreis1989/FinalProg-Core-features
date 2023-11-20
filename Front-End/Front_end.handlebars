@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+    <div class="package-info">
+        <h1>{{ package.name }}</h1>
+        <p>Version: {{ package.version }}</p>
+        <p>Description: {{ package.description }}</p>
+        <p>Homepage: <a href="{{ package.homepage }}" target="_blank">{{ package.homepage }}</a></p>
+        <h2>Dependencies</h2>
+        <ul>
+            {{#each package.dependencies}}
+                <li>{{ @key }}: {{ this }}</li>
+            {{/each}}
+        </ul>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars/dist/handlebars.min.js"></script>
+    <script id="package-template" type="text/x-handlebars-template">
+        <!-- This script block is a template for rendering additional packages dynamically -->
+        <div class="package-info">
+            <h1>{{ name }}</h1>
+            <p>Version: {{ version }}</p>
+            <p>Description: {{ description }}</p>
+            <p>Homepage: <a href="{{ homepage }}" target="_blank">{{ homepage }}</a></p>
+            <h2>Dependencies</h2>
+            <ul>
+                {{#each dependencies}}
+                    <li>{{ @key }}: {{ this }}</li>
+                {{/each}}
+            </ul>
+        </div>
+    </script>
+    <script src="/public/js/main.js"></script>
+</body>
+</html>
