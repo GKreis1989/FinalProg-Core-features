@@ -12,7 +12,7 @@ router.post('/users', async (req, res) => {
     res.json(newUser);
   } catch (error) {
     console.error(error);
-    if(e instanceof CustomException) res.status(e.code).json({error: e.message});
+    if(error instanceof CustomException) res.status(error.code).json({error: error.message});
     else res.status(500).json({error: 'create user error'});
   }
 });
@@ -24,7 +24,7 @@ router.get('/users/:userId', async (req, res) => {
     res.json(user);
   } catch (error) {
     console.error(error);
-    if(e instanceof CustomException) res.status(e.code).json({error: e.message});
+    if(error instanceof CustomException) res.status(error.code).json({error: error.message});
     else res.status(500).json({error: 'get user error'});
   }
 });
@@ -36,7 +36,7 @@ router.put('/users/:userId', async (req, res) => {
     res.json(updatedUser);
   } catch (error) {
     console.error(error);
-    if(e instanceof CustomException) res.status(e.code).json({error: e.message});
+    if(error instanceof CustomException) res.status(error.code).json({error: error.message});
     else res.status(500).json({error: 'update user error'});
   }
 });
@@ -48,7 +48,7 @@ router.delete('/users/:userId', async (req, res) => {
     res.json(deletedUser);
   } catch (error) {
     console.error(error);
-    if(e instanceof CustomException) res.status(e.code).json({error: e.message});
+    if(error instanceof CustomException) res.status(error.code).json({error: error.message});
     else res.status(500).json({error: 'delete user error'});
   }
 });
