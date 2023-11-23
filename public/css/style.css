@@ -1,0 +1,43 @@
+body {
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: rgb(244, 242, 238);
+}
+
+header.index, header.auth {
+    font-size: x-large;
+    font-family: 'Courier New', Courier, monospace;
+    margin-top: 30vh;
+}
+
+main.index, main.auth {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: x-large;
+}
+
+button {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+button#enterButton, button#submitLogin {
+    font-size: x-large;
+}
+
+input.authInput {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: x-large;
+}
+
+form.login > label > input {
+    margin-bottom: 2.5vh;
+}
+
+a#logo {
+    font-family: cursive;
+    font-size: 300%;
+    position: absolute;
+    left: 1vw;
+    top: 0px;
+    text-decoration: none;
+    color: darkslateblue;
+}
