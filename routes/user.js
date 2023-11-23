@@ -5,7 +5,7 @@ import { createUser, getUser, updateUser, removeUser } from '../data/user.js'
 
 const router = Router();
 
-router.post('/users', async (req, res) => {
+router.post('/user', async (req, res) => {
   try {
     const { firstName, lastName, emailAddress, password, role, associatedClinics } = req.body;
     const newUser = await createUser(firstName, lastName, emailAddress, password, role, associatedClinics);
@@ -17,7 +17,7 @@ router.post('/users', async (req, res) => {
   }
 });
 
-router.get('/users/:userId', async (req, res) => {
+router.get('/user/:userId', async (req, res) => {
   try {
     const userId = req.params.userId;
     const user = await getUser(new ObjectId(userId));
@@ -29,7 +29,7 @@ router.get('/users/:userId', async (req, res) => {
   }
 });
 
-router.put('/users/:userId', async (req, res) => {
+router.put('/user/:userId', async (req, res) => {
   try {
     const userId = req.params.userId;
     const updatedUser = await updateUser({ userId: new ObjectId(userId), ...req.body });
@@ -41,7 +41,7 @@ router.put('/users/:userId', async (req, res) => {
   }
 });
 
-router.delete('/users/:userId', async (req, res) => {
+router.delete('/user/:userId', async (req, res) => {
   try {
     const userId = req.params.userId;
     const deletedUser = await removeUser(new ObjectId(userId));
