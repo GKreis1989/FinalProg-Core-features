@@ -12,6 +12,12 @@ CustomException.badParameter = (params) => {
     `error: bad parameter${params.length > 1 ? 's' : ''}: ${params}`
   );
 };
+CustomException.unauthorized = (id) => {
+  return new CustomException(
+    401, // http status code for "not found"
+    `error: failed to authenticate user ${id}`
+  );
+};
 CustomException.notFound = (type, id) => {
   return new CustomException(
     404, // http status code for "not found"

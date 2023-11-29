@@ -2,7 +2,7 @@ import { ObjectId } from "bson";
 import { user as initUser } from "../config/mongoCollections.js";
 import { CustomException, validateObjectId, validateUser } from "../helpers.js";
 
-let user = await initUser();
+export const user = await initUser();
 
 const sampleUser = {
     _id: new ObjectId('654199d077b5d9aa7fedbf6b'),
@@ -13,7 +13,7 @@ const sampleUser = {
     associatedClinics: [
         new ObjectId('654199d077b5d9aa7fedbf6c')
     ],
-    hashedPassword: '12380asd0j01-djiahsd90u90ausd0a9s0dua09sdu093ud9'
+    password: '12380asd0j01-djiahsd90u90ausd0a9s0dua09sdu093ud9'
 };
 
 export const createUser = async (firstName, lastName, emailAddress, password, role, associatedClinics) => {
@@ -45,6 +45,11 @@ export const getUser = async (userId) => {
     delete foundUser['password'];
     return foundUser;
 
+}
+
+export const getAllUsers = async () => {
+    const allUsers = await user.find({ });
+    return allUsers;
 }
 
 export const updateUser = async (config) => {

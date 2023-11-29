@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asclepius - Auth</title>
+    <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+    <header class="auth">
+        <a href="/" id="logo">A</a>
+        <h1>Login</h1>
+    </header>
+    <main class="auth">
+        <form class="login" id="loginForm">
+            <label for="emailAddress">
+                Email Address:
+                <input 
+                    id="emailAddress" 
+                    name="emailAddress" 
+                    type="text"
+                    class="authInput"
+                    placeholder="user@example.com"
+                >
+            </label>
+            <br>
+            <label for="password">
+                Password:
+                <input 
+                    id="password" 
+                    name="password" 
+                    type="password"
+                    class="authInput"
+                    placeholder="password"
+                >
+            </label>
+            <br>
+            <button id="submitLogin" type="submit">Submit</button>
+        </form>
+    </main>
+    <footer>
+        <script src="/public/js/main.js"></script>
+        <script src="/public/js/auth.js"></script>
+    </footer>
+</body>
+</html>
