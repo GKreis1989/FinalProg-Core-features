@@ -47,6 +47,11 @@ export const getUser = async (userId) => {
 
 }
 
+export const getAllUsers = async () => {
+    const allUsers = await user.find({ });
+    return allUsers;
+}
+
 export const updateUser = async (config) => {
 
     const foundUser = await getUser(config.userId);

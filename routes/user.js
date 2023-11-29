@@ -1,9 +1,20 @@
 import { Router } from 'express';
 import { ObjectId } from "bson";
 import { CustomException } from '../helpers.js';
-import { createUser, getUser, updateUser, removeUser } from '../data/user.js'
+import { createUser, getUser, updateUser, removeUser, getAllUsers } from '../data/user.js'
 
 const router = Router();
+
+router.get('/user/all', async (req, res) => {
+  try {
+    const users = await getAllUsers();
+    res.json(users);
+  } catch(e) {
+    console.error(error);
+    if(error instanceof CustomException) res.status(error.code).json({error: error.message});
+    else res.status(500).json({error: 'create user error'});
+  }
+})
 
 router.post('/user', async (req, res) => {
   try {
