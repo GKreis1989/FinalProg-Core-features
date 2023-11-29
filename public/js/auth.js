@@ -16,4 +16,6 @@ loginForm.addEventListener('submit', async (e) => {
     });
     console.log(authResponse.status);
     console.log(await authResponse.text());
+    const responseObject = await authResponse.json();
+    const firstName = responseObject.firstName; // how to get first name
 })
