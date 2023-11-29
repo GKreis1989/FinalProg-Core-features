@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { ObjectId } from "bson";
 import { CustomException } from '../helpers.js';
 import { login } from '../data/auth.js';
+import { createUser } from '../data/user.js';
 
 const router = Router();
 
@@ -18,6 +19,25 @@ router.post('/login', async (req, res) => {
     } catch(e) {
         if(e instanceof CustomException) res.status(e.code).send(e.message);
         else res.status(500).send('login error');
+    }
+});
+
+router.post('/signup', async (req, res) => {
+    const { firstName, lastName, emailAddress, password, role, associatedClinics } = req.body;
+    try {
+        const newUser = await createUser(firstName, lastName, emailAddress, password, role, associatedClinics);
+        
+        res.status(201).json(newUser);
+    } 
+    
+    catch (e) {
+        if (e instanceof CustomException) {
+            res.status(e.code).send(e.message);
+        } 
+        
+        else {
+            res.status(500).send('signup error');
+        }
     }
 });
 
