@@ -12,10 +12,16 @@ CustomException.badParameter = (params) => {
     `error: bad parameter${params.length > 1 ? 's' : ''}: ${params}`
   );
 };
-CustomException.unauthorized = (id) => {
+CustomException.unauthenticated = (id) => {
   return new CustomException(
-    401, // http status code for "not found"
+    401, // http status code for "not authenticated"
     `error: failed to authenticate user ${id}`
+  );
+};
+CustomException.unauthorized = () => {
+  return new CustomException(
+    403, // http status code for "not authorized"
+    `error: user is not authorized to perform this operation`
   );
 };
 CustomException.notFound = (type, id) => {
@@ -74,7 +80,9 @@ export const validateObjectId = (name, id) => {
   return oId;
 }
 
-const userParams = ['firstName', 'lastName', 'emailAddress', 'password', 'role']
+const userParams = ['firstName', 'lastName', 'emailAddress', 'password', 'role'];
+
+const roles = ["doctor", "medical professional", "patient", "admin"];
 
 export const validateUser = (userConfig) => {
   userParams.forEach(key => {
@@ -85,3 +93,11 @@ export const validateUser = (userConfig) => {
   userConfig.associatedClinics = userConfig.associatedClinics.map(clinicId => validateObjectId(clinicId));
   return userConfig;
 };
+
+export const validateClinicName = (clinicName) => {
+  return true; // TODO: implement
+}
+
+export const validateSearchOptions = (searchOptions) => {
+  return searchOptions; // TODO: implement
+}
