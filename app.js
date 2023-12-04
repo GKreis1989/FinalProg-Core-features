@@ -1,5 +1,7 @@
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import session from 'express-session';
+import * as uuid from 'uuid';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -11,6 +13,13 @@ import configRoutes from './routes/index.js';
 const staticDir = express.static(__dirname + '/public');
 const pagesDir = express.static(__dirname + '/pages');
 
+app.use(session({
+  name: 'AuthState',
+  secret: uuid.v4(),
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: 'auto' }
+}));
 app.use('/public', staticDir);
 app.use('/', pagesDir);
 app.use(express.json());
