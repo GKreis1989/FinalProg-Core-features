@@ -33,5 +33,5 @@ const paginatedEndpoint = async (endpoint, offset=0) => {
 export const searchMedicaitons = async (searchOptions) => {
     searchOptions = validateSearchOptions(searchOptions);
     const res = await paginatedEndpoint(`${BASE_URL}?search=${searchOptions.name}&limit=${SEARCH_LIMIT}`);
-    console.log(res);
+    return res
 }
