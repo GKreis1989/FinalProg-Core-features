@@ -101,3 +101,7 @@ export const validateClinicName = (clinicName) => {
 export const validateSearchOptions = (searchOptions) => {
   return searchOptions; // TODO: implement
 }
+
+export const shareClinic = (userA, userB) => {
+  return true; // TODO: implement
+}
