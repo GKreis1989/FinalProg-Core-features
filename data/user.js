@@ -16,7 +16,7 @@ const sampleUser = {
     password: '12380asd0j01-djiahsd90u90ausd0a9s0dua09sdu093ud9'
 };
 
-export const createUser = async (firstName, lastName, emailAddress, password, role, associatedClinics) => {
+export const createUser = async (firstName, lastName, emailAddress, password, role) => {
 
     const newUser = {
         firstName,
@@ -24,21 +24,43 @@ export const createUser = async (firstName, lastName, emailAddress, password, ro
         emailAddress,
         password,
         role,
-        associatedClinics
+        associatedClinics: []
     };
     validateUser(newUser);
+    // TODO: input validation
     const existing = await user.findOne({ emailAddress: emailAddress });
     if(existing) throw CustomException.alreadyExists('user with email', emailAddress);
     const createUserResponse = await user.insertOne(newUser);
     if(createUserResponse.acknowledged) {
-        return await getUser(createUserResponse.insertedId);
+        return await getUserById(createUserResponse.insertedId);
     }
     throw CustomException.serverError('add user');
 
 }
 
-export const getUser = async (userId) => {
+export const loginUser = async (emailAddress, password) => {
 
+    const foundUser = await getUserByEmailAddress(emailAddress);
+    const foundPassword = foundUser.password;
+    delete foundUser['password'];
+    const compare = (a, b) => a === b;
+    if(compare(foundPassword, password)) return foundUser;
+    throw CustomException.unauthenticated('with email address ' + emailAddress);
+
+};
+
+export const getUserByEmailAddress = async (emailAddress) => {
+
+    // TODO: input validation
+    const foundUser = await user.findOne({ emailAddress });
+    if(!foundUser) throw CustomException.notFound("user with email address", emailAddress);
+    return foundUser;
+
+}
+
+export const getUserById = async (userId) => {
+
+    // TODO: input validation
     const oId = validateObjectId('userId', userId);
     const foundUser = await user.findOne({ _id: oId });
     if(!foundUser) throw CustomException.notFound("user with id", userId);
@@ -48,13 +70,20 @@ export const getUser = async (userId) => {
 }
 
 export const getAllUsers = async () => {
+
+    // TODO: input validation
     const allUsers = await user.find({ });
+    allUsers.forEach(user => {
+        delete user['password'];
+    })
     return allUsers;
+
 }
 
 export const updateUser = async (config) => {
 
-    const foundUser = await getUser(config.userId);
+    // TODO: input validation
+    const foundUser = await getUserById(config.userId);
     const oId = foundUser._id;
     delete foundUser['_id'];
     const userKeys = Object.keys(foundUser);
@@ -73,7 +102,7 @@ export const updateUser = async (config) => {
         { $set: updates }
     );
     if(updatedResponse?._id.toString() !== oId.toString()) throw CustomException.serverError("update user");
-    const updatedFoundUser = await getUser(oId);
+    const updatedFoundUser = await getUserById(oId);
     delete updatedFoundUser['password'];
     return updatedFoundUser;
 
@@ -81,8 +110,11 @@ export const updateUser = async (config) => {
 
 export const removeUser = async (userId) => {
 
-    const foundUser = await getUser(userId);
+    // TODO: input validation
+    const foundUser = await getUserById(userId);
     const deleteResponse = await user.deleteOne({ _id: foundUser._id });
+    if(!deleteResponse?.acknowledged) throw CustomException.serverError("delete user")
+    delete foundUser['password'];
     return foundUser;
 
 }
