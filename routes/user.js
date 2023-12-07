@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { ObjectId } from "bson";
 import { CustomException } from '../helpers.js';
-import { createUser, getUser, updateUser, removeUser, getAllUsers, loginUser } from '../data/user.js'
+import { createUser, getUserById, updateUser, removeUser, getAllUsers, loginUser } from '../data/user.js'
 
 const router = Router();
 
@@ -32,7 +32,7 @@ router.route('/:userId')
   .get('/:userId', async (req, res) => {
     try {
       const userId = req.params.userId;
-      const user = await getUser(new ObjectId(userId));
+      const user = await getUserById(new ObjectId(userId));
       res.status(200).json(user);
     } catch (error) {
       console.error(error);
