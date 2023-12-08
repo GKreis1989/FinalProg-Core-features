@@ -17,3 +17,4 @@ export const user = getCollectionFn('user');
 export const clinic = getCollectionFn('clinic');
 export const medication = getCollectionFn('medication');
 export const patient = getCollectionFn('patient');
+export const prescription = getCollectionFn('prescription');
