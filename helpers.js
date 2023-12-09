@@ -7,6 +7,7 @@ export class CustomException {
   }
 }
 CustomException.badParameter = (params) => {
+  params = typeof params == string ? [params] : params;
   return new CustomException(
     400, // http status code for "bad request"
     `error: bad parameter${params.length > 1 ? 's' : ''}: ${params}`
@@ -43,7 +44,7 @@ CustomException.serverError = (failedAction) => {
   );
 }
 
-const validateEmail = (email) => {
+export const validateEmail = (email) => {
   const err = CustomException.badParameter('emailAddress');
   const arr = Array.from(email);
   const atIndex = email.indexOf('@');
@@ -60,7 +61,29 @@ const validateEmail = (email) => {
   })
 }
 
-const validateRole = (role) => ['pharmacist', 'doctor', 'patient', 'admin'].includes(role);
+export const validatePassword = (password) => {
+  if(!password) throw CustomException.badParameter('password must not be undefined');
+  if(typeof password !== 'string') throw CustomException.badParameter('password must have type string');
+  if(password.length < 8) throw CustomException.badParameter('password must have length >= 8');
+  let hasSpecialCharacter = false;
+  let _hasNumber = false;
+  let hasLowercase = false;
+  let hasUppercase = false;
+  const arr = Array.from(password);
+  arr.forEach(char => {
+      if(/[a-z]/.test(char)) hasLowercase = true;
+      else if(/[A-Z]/.test(char)) hasUppercase = true;
+      else if(hasNumber(char)) _hasNumber = true;
+      else hasSpecialCharacter = true;
+  })
+  if(!hasLowercase) throw CustomException.badParameter('lowercase character');
+  if(!hasUppercase) throw CustomException.badParameter('uppercase character');
+  if(!_hasNumber) throw CustomException.badParameter('number');
+  if(!hasSpecialCharacter) throw CustomException.badParameter('special character');
+};
+
+const roles = ["doctor", "medical professional", "patient", "admin"];
+const validateRole = (role) => roles.includes(role);
 
 export const validateString = (name, str) => {
   const err = CustomException.badParameter(name);
@@ -86,14 +109,12 @@ export const validateObjectId = (name, id) => {
 }
 
 const userParams = ['firstName', 'lastName', 'emailAddress', 'password', 'role'];
-
-const roles = ["doctor", "medical professional", "patient", "admin"];
-
 export const validateUser = (userConfig) => {
   userParams.forEach(key => {
     userConfig[key] = validateString(key, userConfig[key]);
   })
   validateEmail(userConfig.emailAddress);
+  validatePassword(userConfig.password);
   validateRole(userConfig.role);
   userConfig.associatedClinics = userConfig.associatedClinics.map(clinicId => validateObjectId(clinicId));
   return userConfig;
