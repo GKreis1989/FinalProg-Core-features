@@ -62,7 +62,7 @@ const validateEmail = (email) => {
 
 const validateRole = (role) => ['pharmacist', 'doctor', 'patient', 'admin'].includes(role);
 
-const validateString = (name, str) => {
+export const validateString = (name, str) => {
   const err = CustomException.badParameter(name);
   if(!str || typeof str !== 'string') throw err;
   str = str.trim();
@@ -96,10 +96,6 @@ export const validateUser = (userConfig) => {
 
 export const validateClinicName = (clinicName) => {
   return true; // TODO: implement
-}
-
-export const validateSearchOptions = (searchOptions) => {
-  return searchOptions; // TODO: implement
 }
 
 export const shareClinic = (userA, userB) => {
