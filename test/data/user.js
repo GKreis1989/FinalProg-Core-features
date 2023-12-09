@@ -102,6 +102,8 @@ const main = async () => {
     else console.log(e);
   }
 
+  console.log();
+
   await reset();
 
 }
