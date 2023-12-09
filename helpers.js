@@ -62,12 +62,17 @@ const validateEmail = (email) => {
 
 const validateRole = (role) => ['pharmacist', 'doctor', 'patient', 'admin'].includes(role);
 
-const validateString = (name, str) => {
+export const validateString = (name, str) => {
   const err = CustomException.badParameter(name);
   if(!str || typeof str !== 'string') throw err;
   str = str.trim();
   if(!str.length) throw err;
   return str;
+}
+
+export const validateStringArray = (name, arr) => {
+  arr.forEach(str => validateString(name, str));
+  return arr;
 }
 
 export const validateObjectId = (name, id) => {
@@ -98,10 +103,24 @@ export const validateClinicName = (clinicName) => {
   return true; // TODO: implement
 }
 
-export const validateSearchOptions = (searchOptions) => {
-  return searchOptions; // TODO: implement
-}
-
 export const shareClinic = (userA, userB) => {
   return true; // TODO: implement
+}
+
+const validMedicationSearchParams = {
+  "productId": "product_id", 
+  "brandName": "brand_name", 
+  "dosageForm": "dosage_form", 
+  "route": "route", 
+  "genericName": "generic_name"
+};
+
+export const validateMedicationSearchParam = (searchParam) => {
+  if(Object.keys(searchParam).length !== 1) throw CustomException.badParameter("searchParam");
+  const key = Object.keys(searchParam)[0];
+  const validKey = validMedicationSearchParams[key];
+  if(!validKey) throw CustomException.badParameter(key);
+  const value = validateString(key, searchParam[key]);
+  const searchString = `${validKey}:"${value}"`;
+  return searchString;
 }
