@@ -2,8 +2,6 @@ import { ObjectId } from "bson";
 import { user as initUser } from "../config/mongoCollections.js";
 import { CustomException, validateObjectId, validateUser } from "../helpers.js";
 
-export const user = await initUser();
-
 const sampleUser = {
     _id: new ObjectId('654199d077b5d9aa7fedbf6b'),
     role: 'patient',
@@ -18,6 +16,7 @@ const sampleUser = {
 
 export const createUser = async (firstName, lastName, emailAddress, password, role) => {
 
+    const user = await initUser();
     const newUser = {
         firstName,
         lastName,
@@ -40,6 +39,7 @@ export const createUser = async (firstName, lastName, emailAddress, password, ro
 
 export const loginUser = async (emailAddress, password) => {
 
+    const user = await initUser();
     const foundUser = await getUserByEmailAddress(emailAddress);
     const foundPassword = foundUser.password;
     delete foundUser['password'];
@@ -52,6 +52,7 @@ export const loginUser = async (emailAddress, password) => {
 export const getUserByEmailAddress = async (emailAddress) => {
 
     // TODO: input validation
+    const user = await initUser();
     const foundUser = await user.findOne({ emailAddress });
     if(!foundUser) throw CustomException.notFound("user with email address", emailAddress);
     return foundUser;
@@ -61,6 +62,7 @@ export const getUserByEmailAddress = async (emailAddress) => {
 export const getUserById = async (userId) => {
 
     // TODO: input validation
+    const user = await initUser();
     const oId = validateObjectId('userId', userId);
     const foundUser = await user.findOne({ _id: oId });
     if(!foundUser) throw CustomException.notFound("user with id", userId);
@@ -72,6 +74,7 @@ export const getUserById = async (userId) => {
 export const getAllUsers = async () => {
 
     // TODO: input validation
+    const user = await initUser();
     const allUsers = await user.find({ });
     allUsers.forEach(user => {
         delete user['password'];
@@ -83,6 +86,7 @@ export const getAllUsers = async () => {
 export const updateUser = async (config) => {
 
     // TODO: input validation
+    const user = await initUser();
     const foundUser = await getUserById(config.userId);
     const oId = foundUser._id;
     delete foundUser['_id'];
@@ -111,6 +115,7 @@ export const updateUser = async (config) => {
 export const removeUser = async (userId) => {
 
     // TODO: input validation
+    const user = await initUser();
     const foundUser = await getUserById(userId);
     const deleteResponse = await user.deleteOne({ _id: foundUser._id });
     if(!deleteResponse?.acknowledged) throw CustomException.serverError("delete user")
