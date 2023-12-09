@@ -1,6 +1,6 @@
 import { ObjectId } from "bson";
 import { user as initUser } from "../config/mongoCollections.js";
-import { CustomException, validateObjectId, validateUser } from "../helpers.js";
+import { CustomException, validateEmail, validateObjectId, validateUser } from "../helpers.js";
 
 const sampleUser = {
     _id: new ObjectId('654199d077b5d9aa7fedbf6b'),
@@ -39,13 +39,19 @@ export const createUser = async (firstName, lastName, emailAddress, password, ro
 
 export const loginUser = async (emailAddress, password) => {
 
+    emailAddress = validateEmail(emailAddress);
+    validatePassword(password);
+    const exception = CustomException.unauthenticated('with email address ' + emailAddress);
     const user = await initUser();
-    const foundUser = await getUserByEmailAddress(emailAddress);
+    const foundUser = await user.findOne({
+        "emailAddress": emailAddress
+    });
+    if(!foundUser?._id) throw exception
     const foundPassword = foundUser.password;
     delete foundUser['password'];
     const compare = (a, b) => a === b;
     if(compare(foundPassword, password)) return foundUser;
-    throw CustomException.unauthenticated('with email address ' + emailAddress);
+    throw exception;
 
 };
 
@@ -55,6 +61,7 @@ export const getUserByEmailAddress = async (emailAddress) => {
     const user = await initUser();
     const foundUser = await user.findOne({ emailAddress });
     if(!foundUser) throw CustomException.notFound("user with email address", emailAddress);
+    delete foundUser['password'];
     return foundUser;
 
 }
