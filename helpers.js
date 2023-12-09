@@ -70,6 +70,11 @@ export const validateString = (name, str) => {
   return str;
 }
 
+export const validateStringArray = (name, arr) => {
+  arr.forEach(str => validateString(name, str));
+  return arr;
+}
+
 export const validateObjectId = (name, id) => {
   let oId;
   try {
@@ -100,4 +105,22 @@ export const validateClinicName = (clinicName) => {
 
 export const shareClinic = (userA, userB) => {
   return true; // TODO: implement
+}
+
+const validMedicationSearchParams = {
+  "productId": "product_id", 
+  "brandName": "brand_name", 
+  "dosageForm": "dosage_form", 
+  "route": "route", 
+  "genericName": "generic_name"
+};
+
+export const validateMedicationSearchParam = (searchParam) => {
+  if(Object.keys(searchParam).length !== 1) throw CustomException.badParameter("searchParam");
+  const key = Object.keys(searchParam)[0];
+  const validKey = validMedicationSearchParams[key];
+  if(!validKey) throw CustomException.badParameter(key);
+  const value = validateString(key, searchParam[key]);
+  const searchString = `${validKey}:"${value}"`;
+  return searchString;
 }
