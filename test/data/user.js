@@ -63,7 +63,7 @@ const main = async () => {
   try {
     console.log('TESTING UPDATE USER');
     const res = await userData.updateUser({
-      userId: id.toString(),
+      _id: id.toString(),
       firstName: "patrick",
       lastName: "hill",
       emailAddress: "phill@stevens.edu"

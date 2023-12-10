@@ -85,7 +85,7 @@ export const validatePassword = (password) => {
 };
 
 const roles = ["doctor", "medical professional", "patient", "admin"];
-const validateRole = (role) => roles.includes(role);
+const validateRole = (role) => roles.includes(role.toLowerCase().trim()) ? role.toLowerCase().trim() : false;
 
 export const validateString = (name, str) => {
   const err = CustomException.badParameter(name);
@@ -101,6 +101,7 @@ export const validateStringArray = (name, arr) => {
 }
 
 export const validateObjectId = (name, id) => {
+  if(id === undefined) throw CustomException.badParameter(name);
   let oId;
   try {
     oId = new ObjectId(id);
@@ -121,6 +122,26 @@ export const validateUser = (userConfig) => {
   userConfig.associatedClinics = userConfig.associatedClinics.map(clinicId => validateObjectId(clinicId));
   return userConfig;
 };
+
+export const validateUpdateUser = (updateUserParams) => {
+  Object.keys(updateUserParams).forEach(key => {
+    validateString(key, updateUserParams[key]);
+    switch(key) {
+      case 'emailAddress':
+        updateUserParams[key] = validateEmail(updateUserParams[key]);
+        break;
+      case 'password':
+        updateUserParams[key] = validatePassword(updateUserParams[key]);
+        break;
+      case 'role':
+        updateUserParams[key] = validateRole(updateUserParams[key]);
+        break;
+      default:
+        if(!userParams.includes(key)) throw CustomException.badParameter(key);
+        updateUserParams[key] = validateString(key, updateUserParams[key]);
+    }
+  });
+}
 
 export const validateClinicName = (clinicName) => {
   return true; // TODO: implement
