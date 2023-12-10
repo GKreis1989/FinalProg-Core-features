@@ -1,6 +1,6 @@
 import { ObjectId } from "bson";
 import { user as initUser } from "../config/mongoCollections.js";
-import { CustomException, validateEmail, validateObjectId, validateUser } from "../helpers.js";
+import { CustomException, validateEmail, validatePassword, validateObjectId, validateUser } from "../helpers.js";
 
 const sampleUser = {
     _id: new ObjectId('654199d077b5d9aa7fedbf6b'),

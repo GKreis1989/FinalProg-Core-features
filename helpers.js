@@ -7,7 +7,7 @@ export class CustomException {
   }
 }
 CustomException.badParameter = (params) => {
-  params = typeof params == string ? [params] : params;
+  params = typeof params === 'string' ? [params] : params;
   return new CustomException(
     400, // http status code for "bad request"
     `error: bad parameter${params.length > 1 ? 's' : ''}: ${params}`
@@ -59,8 +59,10 @@ export const validateEmail = (email) => {
       else throw err;
     }
   })
+  return email.trim();
 }
 
+const hasNumber = (value) => /^\d+$/.test(value);
 export const validatePassword = (password) => {
   if(!password) throw CustomException.badParameter('password must not be undefined');
   if(typeof password !== 'string') throw CustomException.badParameter('password must have type string');
@@ -76,10 +78,10 @@ export const validatePassword = (password) => {
       else if(hasNumber(char)) _hasNumber = true;
       else hasSpecialCharacter = true;
   })
-  if(!hasLowercase) throw CustomException.badParameter('lowercase character');
-  if(!hasUppercase) throw CustomException.badParameter('uppercase character');
-  if(!_hasNumber) throw CustomException.badParameter('number');
-  if(!hasSpecialCharacter) throw CustomException.badParameter('special character');
+  if(!hasLowercase) throw CustomException.badParameter('password must contain lowercase character');
+  if(!hasUppercase) throw CustomException.badParameter('password must contain uppercase character');
+  if(!_hasNumber) throw CustomException.badParameter('password must contain number');
+  if(!hasSpecialCharacter) throw CustomException.badParameter('password must contain special character');
 };
 
 const roles = ["doctor", "medical professional", "patient", "admin"];

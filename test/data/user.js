@@ -20,7 +20,7 @@ const main = async () => {
       'santa',
       'clause',
       'santa@stevens.edu',
-      'northpole',
+      'Northpole1225!',
       'doctor'
     );
     console.log(res);
@@ -49,7 +49,7 @@ const main = async () => {
 
   try {
     console.log('TESTING LOGIN USER');
-    const res = await userData.loginUser("santa@stevens.edu", "northpole");
+    const res = await userData.loginUser("santa@stevens.edu", "Northpole1225!");
     console.log(res);
   } catch(e) {
     if(e instanceof CustomException) {
