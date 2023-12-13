@@ -34,14 +34,14 @@ class User {
 
 }
 
-class Admin extends User {
+export class Admin extends User {
 
     getAllUsers = async () => await super.getAllUsers();
     getUserById = async (id) => await super.getUserById(id);
 
 }
 
-class MedicalProfessional extends User {
+export class MedicalProfessional extends User {
 
     getAllUsers = async () => await super.getAllUsers().filter((user) => shareClinic(user, this.user));
     getUserById = async (id) => {
@@ -57,7 +57,7 @@ class MedicalProfessional extends User {
 
 }
 
-class Doctor extends User {
+export class Doctor extends User {
 
     getAllUsers = async () => await super.getAllUsers().filter((user) => shareClinic(user, this.user));
     getUserById = async (id) => {
