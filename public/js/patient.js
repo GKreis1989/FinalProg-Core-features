@@ -1,5 +1,17 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const userId = window.location.pathname.split('/').pop();
+
+    var parseQueryString = function( queryString ) {
+        var params = {}, queries, temp, i, l;
+        queries = queryString.split("&");
+        for ( i = 0, l = queries.length; i < l; i++ ) {
+            temp = queries[i].split('=');
+            params[temp[0]] = temp[1];
+        }
+        return params;
+    };
+
+    const searchObject = parseQueryString(window.location.search.substring(1));
+    const userId = searchObject?.userId;
     const individualUser = document.getElementById('individualUser');
 
     try {
