@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', async () => {
 
+    /*
+        From Justice Gödel Conder on Stack Overflow
+        https://stackoverflow.com/q/25109312/14602843
+    */
     var parseQueryString = function( queryString ) {
         var params = {}, queries, temp, i, l;
         queries = queryString.split("&");
