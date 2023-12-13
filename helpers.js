@@ -1,4 +1,5 @@
 import { ObjectId } from "mongodb";
+import * as UserInterfaces from "./data/interfaces.js";
 
 export class CustomException {
   constructor(code, message) {
@@ -175,10 +176,10 @@ export const createUserObject = (user) => {
   let userObj;
   switch(role) {
     case 'patient':
-      userObj = new Patient(user);
+      userObj = new UserInterfaces.Patient(user);
       break;
     case 'doctor':
-      userObj = new Doctor(user);
+      userObj = new UserInterfaces.Doctor(user);
       break;
     // TODO: finish for each type of user
   }
