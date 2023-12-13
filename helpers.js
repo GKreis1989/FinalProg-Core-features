@@ -168,3 +168,19 @@ export const validateMedicationSearchParam = (searchParam) => {
   const searchString = `${validKey}:"${value}"`;
   return searchString;
 }
+
+export const createUserObject = (user) => {
+  validateUser(user);
+  const role = user.role;
+  let userObj;
+  switch(role) {
+    case 'patient':
+      userObj = new Patient(user);
+      break;
+    case 'doctor':
+      userObj = new Doctor(user);
+      break;
+    // TODO: finish for each type of user
+  }
+  return userObj;
+}
