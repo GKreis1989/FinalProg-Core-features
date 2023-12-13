@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         users.forEach(user => {
             const listItem = document.createElement('li');
-            listItem.textContent = `${user.firstName} ${user.lastName} - ${user.emailAddress}`;
+            listItem.textContent = `<a href="/individualUser.html?userId=${user._id}">${user.firstName} ${user.lastName} - ${user.emailAddress}</a>`;
             userList.appendChild(listItem);
         });
     } catch (error) {
