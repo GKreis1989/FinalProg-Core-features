@@ -1,4 +1,3 @@
-import express from 'express';
 import addressRoutes from './address.js';
 
 const router = express.Router();
