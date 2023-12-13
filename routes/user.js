@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { ObjectId } from "bson";
-import { CustomException } from '../helpers.js';
+import { CustomException, createUserObject } from '../helpers.js';
 import { createUser, getUserById, updateUser, removeUser, getAllUsers, loginUser } from '../data/user.js'
 
 const router = Router();
@@ -8,7 +8,9 @@ const router = Router();
 router.route('/')
   .get(async (req, res) => {
     try {
-      const users = await getAllUsers();
+      const requestingUser = createUserObject(req.session);
+      const users = requestingUser.getAllUsers();
+      // const users = await getAllUsers();
       res.status(200).json(users);
     } catch(e) {
       console.error(error);
