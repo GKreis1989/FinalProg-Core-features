@@ -1,6 +1,6 @@
 import { ObjectId } from "bson";
 import { user as initUser } from "../config/mongoCollections.js";
-import { CustomException, validateObjectId, validateUser } from "../helpers.js";
+import { CustomException, validateEmail, validatePassword, validateObjectId, validateUser, validateUpdateUser } from "../helpers.js";
 
 const sampleUser = {
     _id: new ObjectId('654199d077b5d9aa7fedbf6b'),
@@ -39,13 +39,19 @@ export const createUser = async (firstName, lastName, emailAddress, password, ro
 
 export const loginUser = async (emailAddress, password) => {
 
+    emailAddress = validateEmail(emailAddress);
+    validatePassword(password);
+    const exception = CustomException.unauthenticated('with email address ' + emailAddress);
     const user = await initUser();
-    const foundUser = await getUserByEmailAddress(emailAddress);
+    const foundUser = await user.findOne({
+        "emailAddress": emailAddress
+    });
+    if(!foundUser?._id) throw exception
     const foundPassword = foundUser.password;
     delete foundUser['password'];
     const compare = (a, b) => a === b;
     if(compare(foundPassword, password)) return foundUser;
-    throw CustomException.unauthenticated('with email address ' + emailAddress);
+    throw exception;
 
 };
 
@@ -55,6 +61,7 @@ export const getUserByEmailAddress = async (emailAddress) => {
     const user = await initUser();
     const foundUser = await user.findOne({ emailAddress });
     if(!foundUser) throw CustomException.notFound("user with email address", emailAddress);
+    delete foundUser['password'];
     return foundUser;
 
 }
@@ -83,32 +90,23 @@ export const getAllUsers = async () => {
 
 }
 
-export const updateUser = async (config) => {
+export const updateUser = async (updateUserParams) => {
 
-    // TODO: input validation
+    const oId = validateObjectId('_id', updateUserParams._id);
     const user = await initUser();
-    const foundUser = await getUserById(config.userId);
-    const oId = foundUser._id;
-    delete foundUser['_id'];
-    const userKeys = Object.keys(foundUser);
-    delete config['userId'];
-    if(config.hasOwnProperty('_id')) delete config['_id']
-    const updates = {};
-    userKeys.forEach(key => {
-        if(config.hasOwnProperty(key)) updates[key] = config[key];
+    const foundUser = await user.findOne({
+        "_id": oId
     });
-    Object.keys(updates).forEach(key => foundUser[key] = updates[key]);
-    foundUser.password = '!FakePassword123';
-    validateUser(foundUser);
-    Object.keys(updates).forEach(key => updates[key] = foundUser[key]);
-    const updatedResponse = await user.findOneAndUpdate(
+    if(!foundUser?.hasOwnProperty("_id")) throw CustomException.notFound("user with id", oId.toString());
+    delete updateUserParams['_id'];
+    validateUpdateUser(updateUserParams);
+    delete updateUserParams['_id'];
+    const updateUserResponse = await user.findOneAndUpdate(
         { _id : oId },
-        { $set: updates }
+        { $set: updateUserParams }
     );
-    if(updatedResponse?._id.toString() !== oId.toString()) throw CustomException.serverError("update user");
-    const updatedFoundUser = await getUserById(oId);
-    delete updatedFoundUser['password'];
-    return updatedFoundUser;
+    if(!updateUserResponse.hasOwnProperty('_id')) throw CustomException.serverError("update user");
+    return await getUserById(oId.toString());
 
 }
 

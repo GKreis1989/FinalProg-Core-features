@@ -1,44 +1,80 @@
-import { shareClinic } from "../helpers";
-import { getAllUsers } from "./user"
-
-export const getAllDoctors = async (doctor) => {
-    const users = await getAllUsers();
-    const filteredUsers = users.filter(user => shareClinic(user, doctor));
-    return filteredUsers;
-}
+import { CustomException, shareClinic } from "../helpers.js";
+import * as userData from "./user.js";
 
 class User {
-    async _getAllUsers(filter) {
-        const users = await getAllUsers();
+
+    constructor(user) {
+        this.user = user;
+    }
+
+    async getAllUsers() {
+        const users = await userData.getAllUsers();
         return users.filter(filter);
     }
+
+    async getUserById(id) {
+        const user = await userData.getUserById(id);
+        return user;
+    }
+
+    async getUserByEmailAddress(emailAddress) {
+        const user = await userData.getUserByEmailAddress(emailAddress);
+        return user;
+    }
+
+    async updateUser(config) {
+        const user = await userData.updateUser(config);
+        return user;
+    }
+
+    async removeUser(id) {
+        const user = await userData.removeUser(id);
+        return user;
+    }
+
 }
 
-class Doctor extends User {
+export class Admin extends User {
 
-    constructor(doctor) {
-        this.doctor = doctor;
+    getAllUsers = async () => await super.getAllUsers();
+    getUserById = async (id) => await super.getUserById(id);
+
+}
+
+export class MedicalProfessional extends User {
+
+    getAllUsers = async () => await super.getAllUsers().filter((user) => shareClinic(user, this.user));
+    getUserById = async (id) => {
+        const user = await super.getUserById(id);
+        if(shareClinic(user, this.user)) return user;
+        throw CustomException.unauthorized();
+    }
+    getUserByEmailAddress = async (emailAddress) => {
+        const user = await super.getUserByEmailAddress(emailAddress);
+        if(shareClinic(user, this.user)) return user;
+        throw CustomException.unauthorized();
     }
 
-    getAllUsers() {
-        return this._getAllUsers((user) => shareClinic(user, this.doctor))
+}
+
+export class Doctor extends User {
+
+    getAllUsers = async () => await super.getAllUsers().filter((user) => shareClinic(user, this.user));
+    getUserById = async (id) => {
+        const user = await super.getUserById(id);
+        if(shareClinic(user, this.user)) return user;
+        throw CustomException.unauthorized();
     }
+
 }
 
 class Patient extends User {
 
-    constructor(patient) {
-        this.patient = patient;
+    getAllUsers = async () => await super.getAllUsers().filter((user) => user._id === this.user._id);
+    getUserById = async (id) => {
+        const user = await super.getUserById(id);
+        if(user._id === this.user._id) return user;
+        throw CustomException.unauthorized();
     }
 
-    getAllUsers() {
-        return this._getAllUsers((user) => user == this.patient)
-    }
-}
-
-user.getAllUsers();
-
-const patient = {
-    data: {},
-    getAllUsers: async (p) => { return await getAllUsers().filter(u => u === p) }
 }
