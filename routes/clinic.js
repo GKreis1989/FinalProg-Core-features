@@ -1,4 +1,6 @@
+import express from 'express';
 import clinicRoutes from './clinic.js';
+import { createUserObject } from '../helpers.js';
 
 router.get('/', async (req, res) => {
   try {
