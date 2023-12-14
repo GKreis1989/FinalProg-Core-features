@@ -18,7 +18,8 @@ router.route('/prescriptions')
   .post(async (req, res) => {
     try {
       const { medicationId, quantity, unit, refills, startDate, endDate } = req.body;
-      const newPrescriptionId = await createPrescription(medicationId, quantity, unit, refills, startDate, endDate);
+      const userObject = createUserObject(req.cookies.session);
+      const newPrescriptionId = await userObject.createPrescription(medicationId, quantity, unit, refills, startDate, endDate);
       res.status(200).json({ prescriptionId: newPrescriptionId });
     } catch (error) {
       console.error(error);
