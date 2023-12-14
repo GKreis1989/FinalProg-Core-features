@@ -1,4 +1,5 @@
 import clinicRoutes from './clinic.js';
+
 router.get('/', async (req, res) => {
   try {
     res.json({ message: 'Get all clinics route', data: clinics });
