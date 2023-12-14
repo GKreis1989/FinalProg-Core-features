@@ -2,6 +2,7 @@ import { ObjectId } from "bson";
 import { prescription as initPrescription } from "../config/mongoCollections.js";
 import { CustomException, validateObjectId, validatePrescription } from "../helpers.js";
 import { getUserById } from "./user.js";
+import { getPatientById } from "./patient.js";
 
 export const prescription = await initPrescription();
 
