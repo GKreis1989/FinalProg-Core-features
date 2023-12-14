@@ -16,6 +16,16 @@ const samplePrescription = {
     assignedTo: null 
 };
 
+
+export const getPrescriptionById = async (prescriptionId) => {
+    // TODO: input validation
+    const oId = validateObjectId('prescriptionId', prescriptionId);
+    const foundPrescription = await prescription.findOne({ _id: oId });
+    if (!foundPrescription) throw CustomException.notFound("prescription with id", prescriptionId);
+    return foundPrescription;
+};
+
+
 export const createPrescription = async (medicationId, quantity, unit, refills, startDate, endDate) => {
     const newPrescription = {
         _id: new ObjectId(),
