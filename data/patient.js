@@ -62,7 +62,7 @@ export const updatePatient = async (config) => {
     const oId = foundPatient._id;
     delete foundPatient['_id'];
     const patientKeys = Object.keys(foundPatient);
-    delete config['PatientId'];
+    delete config['patientId'];
     if(config.hasOwnProperty('_id')) delete config['_id']
     const updates = {};
     patientKeys.forEach(key => {
