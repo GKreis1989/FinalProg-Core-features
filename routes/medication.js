@@ -1,4 +1,6 @@
+import express from 'express';
 import medicationRoutes from './medication.js';
+import { createUserObject } from '../helpers.js';
 
 router.get('/', async (req, res) => {
   try {
