@@ -5,11 +5,13 @@ import { createPrescription, updatePrescription, assignPrescriptionToPatient } f
 
 const router = Router();
 
-router.route('/prescriptions')
+router.route('/')
   .get(async (req, res) => {
     try {
+      const userObject = createUserObject(req.cookies.session);
       res.status(200).json(prescriptions);
     } catch (error) {
+     const userObject = createUserObject(req.cookies.session);
       console.error(error);
       if (error instanceof CustomException) res.status(error.code).json({ error: error.message });
       else res.status(500).json({ error: 'get prescriptions server error' });
@@ -28,11 +30,12 @@ router.route('/prescriptions')
     }
   });
 
-router.route('/prescriptions/:prescriptionId')
+router.route('/:prescriptionId')
   .get(async (req, res) => {
     try {
+      const userObject = createUserObject(req.cookies.session);
       const prescriptionId = req.params.prescriptionId;
-
+      const prescription = await userObject.getPrescriptionById(prescriptionId);
       res.status(200).json(prescription);
     } catch (error) {
       console.error(error);
@@ -40,10 +43,11 @@ router.route('/prescriptions/:prescriptionId')
       else res.status(500).json({ error: 'get prescription server error' });
     }
   })
-  .put('/prescriptions/:prescriptionId', async (req, res) => {
+  .put('/:prescriptionId', async (req, res) => {
     try {
+      const userObject = createUserObject(req.cookies.session);
       const prescriptionId = req.params.prescriptionId;
-      const updatedPrescription = await updatePrescription({ prescriptionId, ...req.body });
+      const updatedPrescription = await userObject.updatePrescription({ prescriptionId, ...req.body });
       res.status(200).json(updatedPrescription);
     } catch (error) {
       console.error(error);
@@ -53,9 +57,10 @@ router.route('/prescriptions/:prescriptionId')
   })
   .post('/assign-prescription/:patientId', async (req, res) => {
     try {
-      const prescriptionId = req.params.prescriptionId;
+      const userObject = createUserObject(req.cookies.session);
+      const { prescriptionId } = req.body;
       const patientId = req.params.patientId;
-      const assignResponse = await assignPrescriptionToPatient(prescriptionId, patientId);
+      const assignResponse = await userObject.assignPrescriptionToPatient(prescriptionId, patientId);
       res.status(200).json(assignResponse);
     } catch (error) {
       console.error(error);
