@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription Management</title>
+</head>
+<body>
+
+    <div>
+        <h2>Create Prescription</h2>
+        <label for="medicationId">Medication ID:</label>
+        <input type="text" id="medicationId">
+        <label for="quantity">Quantity:</label>
+        <input type="text" id="quantity">
+        <label for="unit">Unit:</label>
+        <input type="text" id="unit">
+        <label for="refills">Refills:</label>
+        <input type="text" id="refills">
+        <label for="startDate">Start Date:</label>
+        <input type="text" id="startDate">
+        <label for="endDate">End Date:</label>
+        <input type="text" id="endDate">
+        <button id="createPrescriptionBtn">Create Prescription</button>
+    </div>
+
+    <div>
+        <h2>Update Prescription</h2>
+        <label for="prescriptionId">Prescription ID:</label>
+        <input type="text" id="prescriptionId">
+        <label for="updatedQuantity">Updated Quantity:</label>
+        <input type="text" id="updatedQuantity">
+        <button id="updatePrescriptionBtn">Update Prescription</button>
+    </div>
+
+    <div>
+        <h2>Assign Prescription to Patient</h2>
+        <label for="assignPrescriptionId">Prescription ID:</label>
+        <input type="text" id="assignPrescriptionId">
+        <label for="assignPatientId">Patient ID:</label>
+        <input type="text" id="assignPatientId">
+        <button id="assignPrescriptionBtn">Assign Prescription</button>
+    </div>
+
+    <script>
+    src="/public/js/main.js"
+    src="/public/js/prescription.js"
+    </script>
+
+</body>
+</html>
