@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Management</title>
+    <link rel="stylesheet" href="./public/css/styles.css">
+</head>
+<body>
+
+    <h2>Get All Patients</h2>
+    <button onclick="getAllPatients()">Get All Patients</button>
+    <pre id="allPatientsResult"></pre>
+
+    <h2>Create Patient</h2>
+    <label for="userId">User ID:</label>
+    <input type="text" id="userId" placeholder="User ID"><br>
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" placeholder="First Name"><br>
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" placeholder="Last Name"><br>
+    <label for="emailAddress">Email Address:</label>
+    <input type="email" id="emailAddress" placeholder="Email Address"><br>
+    <label for="dateOfBirth">Date of Birth:</label>
+    <input type="date" id="dateOfBirth"><br>
+    <label for="gender">Gender:</label>
+    <select id="gender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+    </select><br>
+    <label for="allergies">Allergies:</label>
+    <input type="text" id="allergies" placeholder="Allergies"><br>
+    <button onclick="createPatient()">Create Patient</button>
+
+    <h2>Get Patient by ID</h2>
+    <label for="patientId">Patient ID:</label>
+    <input type="text" id="patientId" placeholder="Patient ID">
+    <button onclick="getPatientById()">Get Patient by ID</button>
+    <pre id="patientByIdResult"></pre>
+
+    <h2>Update Patient</h2>
+    <label for="updatePatientBtn">Patient ID:</label>
+    <input type="text" id="updatePatientBtn" placeholder="Patient ID">
+    <label for="updatedFirstName">Updated First Name:</label>
+    <input type="text" id="updatedFirstName" placeholder="Updated First Name"><br>
+    <label for="updatedLastName">Updated Last Name:</label>
+    <input type="text" id="updatedLastName" placeholder="Updated Last Name"><br>
+    <label for="updatedEmailAddress">Updated Email Address:</label>
+    <input type="email" id="updatedEmailAddress" placeholder="Updated Email Address"><br>
+    <label for="updatedDateOfBirth">Updated Date of Birth:</label>
+    <input type="date" id="updatedDateOfBirth"><br>
+    <label for="updatedGender">Updated Gender:</label>
+    <select id="updatedGender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+    </select><br>
+    <label for="updatedAllergies">Updated Allergies:</label>
+    <input type="text" id="updatedAllergies" placeholder="Updated Allergies"><br>
+    <button onclick="updatePatient()">Update Patient</button>
+
+    <script>
+    src="/public/js/main.js"
+    src="/public/js/patient.js"    
+    </script>
+</body>
+</html>
