@@ -1,7 +1,6 @@
 import { CustomException } from "../../helpers.js";
 import * as userData from "../../data/user.js";
 import { user as initUser, clinic as initClinic } from "../../config/mongoCollections.js";
-import { Admin, User } from "../../data/interface.js";
 import { createClinic } from "../../data/clinic.js";
 
 const main = async () => {

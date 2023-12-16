@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { ObjectId } from "bson";
-import { CustomException, createUserObject } from '../helpers.js';
+import { CustomException } from '../helpers.js';
 import { createUser, getUserById, updateUser, removeUser, getAllUsers, loginUser } from '../data/user.js'
 
 const router = Router();

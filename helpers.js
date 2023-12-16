@@ -1,5 +1,4 @@
 import { ObjectId } from "mongodb";
-import * as UserInterfaces from "./data/interface.js";
 
 export class CustomException {
   constructor(code, message) {
@@ -168,22 +167,6 @@ export const validateMedicationSearchParam = (searchParam) => {
   const value = validateString(key, searchParam[key]);
   const searchString = `${validKey}:"${value}"`;
   return searchString;
-}
-
-export const createUserObject = (user) => {
-  validateUser(user);
-  const role = user.role;
-  let userObj;
-  switch(role) {
-    case 'patient':
-      userObj = new UserInterfaces.Patient(user);
-      break;
-    case 'doctor':
-      userObj = new UserInterfaces.Doctor(user);
-      break;
-    // TODO: finish for each type of user
-  }
-  return userObj;
 }
 
 export const validatePatient = ( patientParams ) => {
