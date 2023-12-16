@@ -40,19 +40,17 @@ export const createClinic = async (clinicName) => {
 
 }
 
-export const editClinicName = async (clinicName, newClinicName, userId) => {
+export const editClinicName = async (clinicName, newClinicName) => {
 
     const clinic = await initClinic();
-    const foundUser = await getUserById(userId);
-    if(foundUser?.role !== 'admin') throw CustomException.unauthorized();
-    let foundClinic = await findClinicByName(clinicName, userId);
+    let foundClinic = await findClinicByName(clinicName);
     validateClinicName(newClinicName);
     const updatedResponse = await clinic.findOneAndUpdate(
         { name: clinicName },
         { $set: { name: newClinicName } }
     );
     if(updatedResponse?._id.toString() !== oId.toString()) throw CustomException.serverError("update clinic");
-    foundClinic = await findClinicByName(newClinicName, userId);
+    foundClinic = await findClinicByName(newClinicName);
     return foundClinic;
 
 }

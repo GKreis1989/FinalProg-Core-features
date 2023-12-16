@@ -182,6 +182,16 @@ export const validateUpdatePatient = (updatePatientParams) => {
 }
 
 export const authenticateUser = (request) => {
+  if(process.env.TESTING === 'TRUE') {
+    return {
+      firstName: 'patrick',
+      lastName: 'hill',
+      emailAddress: 'phill@stevens.edu',
+      role: 'admin',
+      associatedClinics: []
+    };
+  }
+
   if(request.session.user.hasOwnProperty('role')) {
     return request.session.user;
   }
