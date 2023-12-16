@@ -1,60 +1,29 @@
 import express from 'express';
-import clinicRoutes from './clinic.js';
-import { createUserObject } from '../helpers.js';
+import * as clinicData from '../data/clinic.js';
+import * as helpers from '../helpers.js';
 
-router.get('/', async (req, res) => {
-  try {
-    res.json({ message: 'Get all clinics route', data: clinics });
-  } 
-  
-  catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+const router = Router();
 
-router.get('/:id', async (req, res) => {
-  const clinicId = req.params.id;
-  try {
-    res.json({ message: `Get clinic by ID route for ID: ${clinicId}`, data: clinic });
-  } 
-  
-  catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-router.post('/', async (req, res) => {
-  const newClinic = req.body;
-  try {
-    res.json({ message: 'Create clinic route', data: createdClinic });
-  } 
-  
-  catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-router.put('/:id', async (req, res) => {
-  const clinicId = req.params.id;
-  const updatedClinic = req.body;
-  try {
-    res.json({ message: `Update clinic route for ID: ${clinicId}`, data: updatedClinic });
-  } 
-  
-  catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-router.delete('/:id', async (req, res) => {
-  const clinicId = req.params.id;
-  try {
-    res.json({ message: `Delete clinic route for ID: ${clinicId}`, data: deletedClinic });
-  } 
-  
-  catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-export default router;
+router.route('/')
+    .get(async(req, res) => {
+        try {
+            const user = helpers.authenticateUser(req);
+            let res;
+            switch(user.role) {
+                case 'admin':
+                    res = await clinicData.getAllClinics();
+                    break;
+                case 'medical professional':
+                case 'doctor':
+                case 'patient':
+                    res = await clinicData.getAllClinics.filter(clinic => {
+                        user.associatedClinics.includes(clinic.name);
+                    });
+                    break;
+            }
+        } catch(e) {
+            console.error(error);
+            if(error instanceof CustomException) res.status(error.code).json({error: error.message});
+            else res.status(500).json({error: 'delete user server error'});
+        }
+    })

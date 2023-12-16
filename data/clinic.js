@@ -19,6 +19,7 @@ export const getAllClinics = async () => {
 export const findClinicByName = async (clinicName) => {
 
     const clinic = await initClinic();
+    validateClinicName(clinicName);
     const foundClinic = await clinic.findOne({ name: clinicName });
     if(!foundClinic?.hasOwnProperty('_id')) throw CustomException.notFound('clinic', clinicName);
     return foundClinic;

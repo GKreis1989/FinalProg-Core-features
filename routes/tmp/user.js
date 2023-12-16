@@ -31,7 +31,7 @@ router.route('/')
   });
 
 router.route('/:userId')
-  .get('/:userId', async (req, res) => {
+  .get(async (req, res) => {
     try {
       const userId = req.params.userId;
       const user = await getUserById(new ObjectId(userId));
@@ -42,7 +42,7 @@ router.route('/:userId')
       else res.status(500).json({error: 'get user server error'});
     }
   })
-  .put('/:userId', async (req, res) => {
+  .put(async (req, res) => {
     try {
       const userId = req.params.userId;
       const updatedUser = await updateUser({ userId: new ObjectId(userId), ...req.body });
@@ -53,7 +53,7 @@ router.route('/:userId')
       else res.status(500).json({error: 'update user server error'});
     }
   })
-  .delete('/:userId', async (req, res) => {
+  .delete(async (req, res) => {
     try {
       const userId = req.params.userId;
       const deletedUser = await removeUser(new ObjectId(userId));

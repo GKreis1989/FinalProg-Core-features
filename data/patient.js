@@ -1,11 +1,7 @@
 import { ObjectId } from "bson";
 import { patient as initPatient } from "../config/mongoCollections.js";
-import { user as initUser } from "../config/mongoCollections.js";
 import { CustomException, validateObjectId, validatePatient } from "../helpers.js";
-import { getUserById } from "./user.js";
-
-export const patient = await initPatient();
-const user = await initUser();
+import { getPrescriptionById } from "./prescription.js";
 
 const samplePatient = {
     _id: new ObjectId, //patient collection ID
@@ -19,75 +15,92 @@ const samplePatient = {
     prescriptions: [],
 };
 
+export const createPatient = async (user, dateOfBirth, gender, allergies) => {
 
-export const addPatient = async (userId, firstName, lastName, emailAddress, dateOfBirth, gender, allergies) => {
-        const newPatient = {
-        userId,
-        firstName,
-        lastName,
-        emailAddress,
+    const userId = user._id;
+    delete user['_id'];
+    user.userId = userId;
+    const newPatient = validatePatient({
+        ...user,
         dateOfBirth,
         gender,
-        medicalHistory,
         allergies,
-        prescriptions: [],
-    }
-       validatePatient(newPatient);
-    // TODO: input validation
-    const existing = await user.findOne({ userId: userId });
-    if(existing) throw CustomException.alreadyExists('user with ID', userId);
-    const createPatientResponse = await user.insertOne(newPatient);
+        prescriptions: []
+    });
+    const patient = await initPatient();
+    const createPatientResponse = await patient.insertOne(newPatient);
     if(createPatientResponse.acknowledged) {
-        return await getUserById(createPatientResponse.insertedId);
+        return await getPatientByUserId(userId);
     }
     throw CustomException.serverError('add patient');
-}
 
+};
 
+export const getPatientByUserId = async (userId) => {
 
-export const getAllPatient = async () => {
-    // TODO: input validation
-    const allPatient = await patient.find({ });
-     //Verify route checks doctor/medical professional permission
-    return allPatient;
-
-}
-
-
-export const updatePatient = async (config) => {
-    // TODO: input validation
-
-    //verify doctor or medical professional 
-    const foundPatient = await getPatientById(config.patientId);
-    const oId = foundPatient._id;
-    delete foundPatient['_id'];
-    const patientKeys = Object.keys(foundPatient);
-    delete config['patientId'];
-    if(config.hasOwnProperty('_id')) delete config['_id']
-    const updates = {};
-    patientKeys.forEach(key => {
-        if(config.hasOwnProperty(key)) updates[key] = config[key];
-    });
-    Object.keys(updates).forEach(key => foundPatient[key] = updates[key]);
- 
-    validatePatient(foundPatient);
-    Object.keys(updates).forEach(key => updates[key] = foundPatient[key]);
-    const updatedResponse = await patient.findOneAndUpdate(
-        { _id : oId },
-        { $set: updates }
-    );
-    if(updatedResponse?._id.toString() !== oId.toString()) throw CustomException.serverError("update patient");
-    const updatedFoundPatient = await getPatientById(oId);
-    delete updatedFoundPatient['password'];
-    return updatedFoundPatient;
-
-}
-
-
-export const getPatientById = async (patientId) => {
-    // TODO: input validation
-    const oId = validateObjectId('patientId', patientId);
-    const foundPatient = await patient.findOne({ _id: oId });
-    if (!foundPatient) throw CustomException.notFound("patient with id", patientId);
+    const patient = await initPatient();
+    const oId = validateObjectId('userId', userId);
+    const foundPatient = await patient.findOne({ userId: oId });
+    if(!foundPatient) throw CustomException.notFound("patient with userId", userId);
     return foundPatient;
+
+};
+
+
+export const updatePatient = async (updatePatientParams) => {
+
+    const oId = validateObjectId('userId', updatePatientParams.userId);
+    const patient = await initPatient();
+    const foundPatient = await patient.findOne({
+        "userId": oId
+    });
+    if(!foundPatient?.hasOwnProperty("_id")) throw CustomException.notFound("patient with userId", oId.toString());
+    delete updatePatientParams['userId'];
+    validateUpdatePatient(updatePatientParams);
+    delete updatePatientParams['userId'];
+    const updatePatientResponse = await patient.findOneAndUpdate(
+        { userId : oId },
+        { $set: updatePatientParams }
+    );
+    if(!updatePatientResponse.hasOwnProperty('_id')) throw CustomException.serverError("update patient");
+    return await getPatientByUserId(updatePatientResponse._id.toString());
+
+};
+
+export const addPrescriptionToPatient = async (userId, prescriptionId) => {
+
+    const oId = validateObjectId('userId', userId);
+    const patient = await initPatient();
+    const foundPatient = await getPatientByUserId(userId);
+    if(!foundPatient?.hasOwnProperty("_id")) throw CustomException.notFound("patient with userId", oId.toString());
+    const foundPrescription = await getPrescriptionById(prescriptionId);
+    if(!foundPrescription?.hasOwnProperty('_id')) throw CustomException.notFound("prescription with id", prescriptionId.toString());
+    if(foundPatient.prescriptions.includes(foundPrescription._id)) throw CustomException.alreadyExists(`prescription ${prescriptionId} for user`, foundPatient._id.toString())
+    const prescriptions = [...foundPatient.prescriptions, prescriptionId];
+    const updatePatientResponse = await patient.findOneAndUpdate(
+        { userId : oId },
+        { $set: { prescriptions } }
+    );
+    if(!updatePatientResponse.hasOwnProperty('_id')) throw CustomException.serverError("add prescription to patient");
+    return await getPatientByUserId(oId.toString());
+
+};
+
+export const removePrescriptionFromPatient = async (userId, prescriptionId) => {
+
+    const oId = validateObjectId('userId', userId);
+    const patient = await initPatient();
+    const foundPatient = await getPatientByUserId(userId);
+    if(!foundPatient?.hasOwnProperty("_id")) throw CustomException.notFound("patient with userId", oId.toString());
+    const foundPrescription = await getPrescriptionById(prescriptionId);
+    if(!foundPrescription?.hasOwnProperty('_id')) throw CustomException.notFound("prescription with id", prescriptionId.toString());
+    const prescriptions = foundPatient.prescriptions.filter(prescription => prescription.toString() !== prescriptionId.toString());
+    if(foundPatient.prescriptions.length === prescriptions.length) throw CustomException.notFound(`prescription ${prescriptionId} for user`, foundPatient._id.toString())
+    const updatePatientResponse = await patient.findOneAndUpdate(
+        { userId : oId },
+        { $set: { prescriptions } }
+    );
+    if(!updatePatientResponse.hasOwnProperty('_id')) throw CustomException.serverError("remove prescription from patient");
+    return await getPatientByUserId(oId.toString());
+
 };

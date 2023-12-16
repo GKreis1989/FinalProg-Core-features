@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { ObjectId } from "bson";
 import { CustomException, createUserObject } from '../helpers.js';
-import { createPrescription, updatePrescription, assignPrescriptionToPatient } from '../data/prescipriton.js'
+import { createPrescription, updatePrescription, assignPrescriptionToPatient } from '../data/prescription.js'
 
 const router = Router();
 

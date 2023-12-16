@@ -1,6 +1,7 @@
 import { ObjectId } from "bson";
 import { user as initUser } from "../config/mongoCollections.js";
 import { CustomException, validateEmail, validatePassword, validateObjectId, validateUser, validateUpdateUser } from "../helpers.js";
+import { findClinicByName } from "./clinic.js";
 
 const sampleUser = {
     _id: new ObjectId('654199d077b5d9aa7fedbf6b'),
@@ -119,5 +120,43 @@ export const removeUser = async (userId) => {
     if(!deleteResponse?.acknowledged) throw CustomException.serverError("delete user")
     delete foundUser['password'];
     return foundUser;
+
+}
+
+export const addUserToClinic = async (userId, clinicName) => {
+
+    const user = await initUser();
+    const oId = validateObjectId('userId', userId);
+    const foundUser = await getUserById(oId);
+    const clinic = await findClinicByName(clinicName);
+    if(foundUser.associatedClinics.includes(clinic.name)) {
+        throw CustomException.alreadyExists(`user ${userId} enrollment in clinic`, clinicName);
+    }
+    const associatedClinics = [...foundUser.associatedClinics, clinic.name];
+    const updateUserResponse = await user.findOneAndUpdate(
+        { _id: oId },
+        { $set: { associatedClinics } }
+    );
+    if(!updateUserResponse.hasOwnProperty('_id')) throw CustomException.serverError("add associated clinic");
+    return await getUserById(oId.toString());
+
+}
+
+export const removeUserFromClinic = async (userId, clinicName) => {
+
+    const user = await initUser();
+    const oId = validateObjectId('userId', userId);
+    const foundUser = await getUserById(oId);
+    await findClinicByName(clinicName);
+    const associatedClinics = foundUser.associatedClinics.filter(clinic => clinic !== clinicName);
+    if(foundUser.associatedClinics.length === associatedClinics.length) {
+        throw CustomException.notFound(`user ${userId} enrollment in clinic`, clinicName);
+    }
+    const updateUserResponse = await user.findOneAndUpdate(
+        { _id: oId },
+        { $set: { associatedClinics } }
+    );
+    if(!updateUserResponse.hasOwnProperty('_id')) throw CustomException.serverError("remove associated clinic");
+    return await getUserById(oId.toString());
 
 }

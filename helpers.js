@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import * as UserInterfaces from "./data/interfaces.js";
+import * as UserInterfaces from "./data/interface.js";
 
 export class CustomException {
   constructor(code, message) {
@@ -120,7 +120,7 @@ export const validateUser = (userConfig) => {
   validateEmail(userConfig.emailAddress);
   validatePassword(userConfig.password);
   validateRole(userConfig.role);
-  userConfig.associatedClinics = userConfig.associatedClinics.map(clinicId => validateObjectId(clinicId));
+  userConfig.associatedClinics = userConfig.associatedClinics.map(clinicId => validateObjectId('clinicId', clinicId));
   return userConfig;
 };
 
@@ -145,7 +145,7 @@ export const validateUpdateUser = (updateUserParams) => {
 }
 
 export const validateClinicName = (clinicName) => {
-  return true; // TODO: implement
+  return clinicName; // TODO: implement
 }
 
 export const shareClinic = (userA, userB) => {
@@ -184,4 +184,23 @@ export const createUserObject = (user) => {
     // TODO: finish for each type of user
   }
   return userObj;
+}
+
+export const validatePatient = ( patientParams ) => {
+  return patientParams;
+}
+
+export const validatePrescription = (prescriptionParams) => {
+  return prescriptionParams;
+}
+
+export const validateUpdatePatient = (updatePatientParams) => {
+  return updatePatientParams;
+}
+
+export const authenticateUser = (request) => {
+  if(request.session.user.hasOwnProperty('role')) {
+    return request.session.user;
+  }
+  throw CustomException.unauthenticated('');
 }
