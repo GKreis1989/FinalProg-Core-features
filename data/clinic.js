@@ -11,7 +11,7 @@ const sampleClinic = {
 export const getAllClinics = async () => {
 
     const clinic = await initClinic();
-    const allClinics = await clinic.find({});
+    const allClinics = (await clinic.find({})).toArray();
     return allClinics;
 
 }
@@ -49,7 +49,7 @@ export const editClinicName = async (clinicName, newClinicName) => {
         { name: clinicName },
         { $set: { name: newClinicName } }
     );
-    if(updatedResponse?._id.toString() !== oId.toString()) throw CustomException.serverError("update clinic");
+    if(!updatedResponse?._id) throw CustomException.serverError("update clinic");
     foundClinic = await findClinicByName(newClinicName);
     return foundClinic;
 
