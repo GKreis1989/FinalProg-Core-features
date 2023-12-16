@@ -144,12 +144,29 @@ export const validateUpdateUser = (updateUserParams) => {
 }
 
 export const validateClinicName = (clinicName) => {
-  return clinicName; // TODO: implement
-}
+  if (!clinicName || typeof clinicName !== 'string' || clinicName.length > 50) {
+    throw CustomException.badParameter('Invalid clinicName');;
+  }
+  return clinicName.trim();
+};
+
 
 export const shareClinic = (userA, userB) => {
-  return true; // TODO: implement
-}
+  if (!userA || !userB || typeof userA !== 'object' || typeof userB !== 'object') {
+    throw CustomException.badParameter('Share Clinic ') ;
+  }
+  if (!userA.clinics || !userB.clinics || !Array.isArray(userA.clinics) || !Array.isArray(userB.clinics)) {
+    throw CustomException.badParameter('Share Clinic ') ;
+  }
+  for (const clinicA of userA.clinics) {
+    for (const clinicB of userB.clinics) {
+      if (clinicA.id === clinicB.id) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
 
 const validMedicationSearchParams = {
   "productId": "product_id", 
@@ -169,17 +186,53 @@ export const validateMedicationSearchParam = (searchParam) => {
   return searchString;
 }
 
-export const validatePatient = ( patientParams ) => {
-  return patientParams;
-}
+export const validatePatient = (patient) => {
+  if (!patient || typeof patient !== 'object') {
+    throw CustomException.badParameter('Invalid patient object');
+  }
+  if (!('userId' in patient) || typeof patient.userId !== 'object') {
+    throw CustomException.badParameter('Invalid or missing userId');
+  }
+  if (!('dateOfBirth' in patient) || !(patient.dateOfBirth instanceof Date)) {
+    throw CustomException.badParameter('Invalid or missing dateOfBirth');
+  }
+  if (!('gender' in patient) || typeof patient.gender !== 'string') {
+    throw CustomException.badParameter('Invalid or missing gender');
+  }
+  if (!('allergies' in patient) || !Array.isArray(patient.allergies)) {
+    throw CustomException.badParameter('Invalid or missing allergies');
+  }
+  return patient;
+};
 
-export const validatePrescription = (prescriptionParams) => {
-  return prescriptionParams;
-}
+export const validatePrescription = (prescription) => {
+  if (!prescription || typeof prescription !== 'object') {
+    throw CustomException.badParameter('Invalid prescription object');
+  }
+  if (!('quantity' in prescription) || typeof prescription.quantity !== 'number' || prescription.quantity <= 0) {
+    throw CustomException.badParameter('Invalid or missing quantity');
+  }
+  if (!('unit' in prescription) || typeof prescription.unit !== 'string') {
+    throw CustomException.badParameter('Invalid or missing unit');
+  }
+  if (!('refills' in prescription) || typeof prescription.refills !== 'number' || prescription.refills < 0) {
+    throw CustomException.badParameter('Invalid or missing refills');
+  }
+  if (!('startDate' in prescription) || !(prescription.startDate instanceof Date)) {
+    throw CustomException.badParameter('Invalid or missing startDate');
+  }
+  if (!('endDate' in prescription) || !(prescription.endDate instanceof Date)) {
+    throw CustomException.badParameter('Invalid or missing endDate');
+  }
+  return prescription;
+};
+
 
 export const validateUpdatePatient = (updatePatientParams) => {
   return updatePatientParams;
 }
+
+
 
 export const authenticateUser = (request) => {
   if(process.env.TESTING === 'TRUE') {
