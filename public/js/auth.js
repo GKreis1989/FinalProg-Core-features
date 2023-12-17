@@ -15,6 +15,8 @@ const header = $id('header');
 let modeLogin = true;
 
 const requestLogin = async () => {
+    validateEmail(emailAddressInput.value);
+    validatePassword(passwordInput.value);
     const authResponse = await fetch("/user/login", {
         "method": "POST",
         "body": JSON.stringify({
@@ -46,6 +48,7 @@ const requestRegister = async () => {
 }
 
 const createPatient = async (user) => {
+    // TODO: input validation
     authResponse = await fetch("/patient", {
         "method": "POST",
         "body": JSON.stringify({
@@ -63,12 +66,16 @@ const createPatient = async (user) => {
 
 loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    let authResponse = await (modeLogin ? requestLogin : requestRegister)();
-    let user = await authResponse.json();
-    if(user.hasOwnProperty('role') && user.role == 'patient') user = await (await createPatient(user)).json();
-    if(user.hasOwnProperty('_id')) window.location = '/user.html';
-    else {
-        error(user.error);
+    try {
+        let authResponse = await (modeLogin ? requestLogin : requestRegister)();
+        let user = await authResponse.json();
+        if(user.hasOwnProperty('role') && user.role == 'patient') user = await (await createPatient(user)).json();
+        if(user.hasOwnProperty('_id')) window.location = '/user.html';
+        else {
+            error(user.error);
+        }
+    } catch(err) {
+        error(err.error);
     }
 })
 

@@ -9,6 +9,7 @@ const userName = $id('user-name');
 
 prescribeForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    // TODO: quantity, unit, refills, startDate, endDate, instructions
     const userId = window.localStorage['currentUser'];
     const res = await fetch(`/prescription/${userId}`, {
         method: "POST",

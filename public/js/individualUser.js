@@ -79,14 +79,18 @@ const updateUser = async (updates) => {
 }
 
 userForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const updates = { _id: user._id };
-    if(firstName.value !== user.firstName) updates.firstName = firstName.value;
-    if(lastName.value !== user.lastName) updates.lastName = lastName.value;
-    if(emailAddress.value !== user.emailAddress) updates.emailAddress = emailAddress.value;
-    if(role.value !== user.role) updates.role = role.value;
-    if(Object.keys(updates).length !== 1) {
-        const res = await updateUser(updates);
-        if(res.hasOwnProperty('_id')) window.location = '/';
+    try {
+        e.preventDefault();
+        const updates = { _id: user._id };
+        if(firstName.value !== user.firstName) updates.firstName = validateFirstName(firstName.value);
+        if(lastName.value !== user.lastName) updates.lastName = validateLastName(lastName.value);
+        if(emailAddress.value !== user.emailAddress) updates.emailAddress = validateEmail(emailAddress.value);
+        if(role.value !== user.role) updates.role = validateRole(role.value);
+        if(Object.keys(updates).length !== 1) {
+            const res = await updateUser(updates);
+            if(res.hasOwnProperty('_id')) window.location = '/';
+        }
+    } catch(err) {
+        error(err.error);
     }
 });

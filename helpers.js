@@ -207,13 +207,13 @@ export const validatePrescription = (prescription) => {
   if (!prescription || typeof prescription !== 'object') {
     throw CustomException.badParameter('Invalid prescription object');
   }
-  if (!('quantity' in prescription) || typeof prescription.quantity !== 'number' || prescription.quantity <= 0) {
+  if (!('quantity' in prescription) || typeof prescription.quantity !== 'number' || prescription.quantity <= 0 || prescription.quantity > 400) {
     throw CustomException.badParameter('Invalid or missing quantity');
   }
   if (!('unit' in prescription) || typeof prescription.unit !== 'string') {
     throw CustomException.badParameter('Invalid or missing unit');
   }
-  if (!('refills' in prescription) || typeof prescription.refills !== 'number' || prescription.refills < 0) {
+  if (!('refills' in prescription) || typeof prescription.refills !== 'number' || prescription.refills <= 0 || prescription.quantity > 50) {
     throw CustomException.badParameter('Invalid or missing refills');
   }
   if (!('startDate' in prescription) || new Date(prescription.startDate) < new Date()) {

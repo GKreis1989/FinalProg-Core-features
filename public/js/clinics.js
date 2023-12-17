@@ -12,7 +12,8 @@ const joinClinic = async (e) => {
         }
     });
     const joinClinic = await joinClinicResponse.json();
-    console.log(joinClinic);
+    if(joinClinic?.hasOwnProperty('_id')) window.location = '/index.html';
+    else error(joinClinic.error);
 }
 
 const populateClinicList = async() => {
