@@ -85,7 +85,7 @@ export const validatePassword = (password) => {
 };
 
 const roles = ["doctor", "medical professional", "patient", "admin"];
-const validateRole = (role) => roles.includes(role.toLowerCase().trim()) ? role.toLowerCase().trim() : false;
+export const validateRole = (role) => roles.includes(role.toLowerCase().trim()) ? role.toLowerCase().trim() : false;
 
 export const validateString = (name, str) => {
   const err = CustomException.badParameter(name);
