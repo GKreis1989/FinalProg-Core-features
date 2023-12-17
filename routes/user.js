@@ -36,6 +36,21 @@ router.route('/')
             if(error instanceof helpers.CustomException) res.status(error.code).json({error: error.message});
             else res.status(500).json({error: 'create user server error'});
         }
+    })
+    .put(async (req, res) => {
+        try {
+            const requestingUser = helpers.authenticateUser(req);
+            const { userId } = req.body;
+            if(userId?.toString() !== requestingUser._id?.toString() && requestingUser.role !== 'admin')
+                throw helpers.CustomException.unauthorized();
+            const updatedUser = await userData.updateUser(req.body);
+            req.session.user = updatedUser;
+            res.status(200).json(updatedUser);
+        } catch(error) {
+            console.error(error);
+            if(error instanceof helpers.CustomException) res.status(error.code).json({error: error.message});
+            else res.status(500).json({error: 'update user server error'});
+        }
     });
 
 router.route('/login')

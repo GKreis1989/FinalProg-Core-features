@@ -43,12 +43,12 @@ const main = async () => {
     console.log(updatePatientResponse.status, updatePatientResponse.data);
     console.log();
 
-    console.log('TESTING LOGIN PATIENT');
-    const loginPatientResponse = await axios.post('http://localhost:3000/user/login', {
+    console.log('TESTING LOGIN User');
+    const loginUserResponse = await axios.post('http://localhost:3000/user/login', {
         emailAddress: 'phill@stevens.edu',
         password: "1234Password!"
     });
-    console.log(loginPatientResponse.status, loginPatientResponse.data);
+    console.log(loginUserResponse.status, loginUserResponse.data);
     console.log();
 
     console.log('TESTING GET ALL USERS');
@@ -72,6 +72,14 @@ const main = async () => {
         clinicName: 'Test Clinic'
     });
     console.log(removeUserFromClinicResponse.status, removeUserFromClinicResponse.data);
+    console.log();
+    
+    console.log('TESTING UPDATE USER');
+    const updateUserResponse = await axios.put('http://localhost:3000/user',{
+        _id: getAllUsersResponse.data[0]._id,
+        lastName: 'washington'
+    });
+    console.log(updateUserResponse.status, updateUserResponse.data);
     console.log();
 
     await reset();
