@@ -246,7 +246,7 @@ export const authenticateUser = (request) => {
     };
   }
 
-  if(request.session.user.hasOwnProperty('role')) {
+  if(request?.session?.user.hasOwnProperty('role')) {
     return request.session.user;
   }
   throw CustomException.unauthenticated('');

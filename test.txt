@@ -1,16 +1,24 @@
-<!DOCTYPE html>
+
+> cs-546-lab-6@1.0.0 routes
+> METHOD=ROUTES TESTING=TRUE node test/index.js
+
+TESTING CREATE CLINIC
+200 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asclepius - Home</title>
+    <title>Asclepius - Enter</title>
     <link rel="stylesheet" href="/public/css/style.css">
 </head>
 <body>
     <header class="index">
         <a href="/index.html" id="logo">A</a>
+        <h1 class="index">Asclepius</h1>
+        <p class="index">Welcome to Asclepius</p>
     </header>
-    <main>
+    <main class="index">
+        <button id="enterButton">Enter</button>
     </main>
     <footer>
         <script src="/public/js/main.js"></script>
@@ -18,3 +26,6 @@
     </footer>
 </body>
 </html>
+
+
+TESTING EDIT CLINIC NAME
