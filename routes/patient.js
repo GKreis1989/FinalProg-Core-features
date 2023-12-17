@@ -6,7 +6,7 @@ import * as helpers from '../helpers.js';
 const router = express.Router();
 
 router.route('/')
-    .post(async (req, res) => { // create user
+    .post(async (req, res) => {
         try {
             const requestingUser = await helpers.authenticateUser(req);
             const { user, dateOfBirth, gender, allergies } = req.body;
@@ -19,7 +19,7 @@ router.route('/')
             else res.status(500).json({error: 'create patient server error'});
         }
     })
-    .put(async (req, res) => { // update patient
+    .put(async (req, res) => {
         try {
             const requestingUser = await helpers.authenticateUser(req);
             const isSelf = requestingUser._id == req.body.userId;

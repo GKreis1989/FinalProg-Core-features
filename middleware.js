@@ -15,7 +15,7 @@ export const ROOT = async (req, res, next) => {
     }
     if(user.emailAddress == 'unauthenticated') {
         if(req.method == 'GET') {
-            if(['/index.html', '/auth.html'].includes(req.originalUrl)
+            if(['/index.html', '/auth.html', '/logout'].includes(req.originalUrl)
             || req.originalUrl.endsWith(".css") || req.originalUrl.endsWith(".js"))
                 return next();
         }
@@ -25,6 +25,14 @@ export const ROOT = async (req, res, next) => {
         return res.redirect('/auth.html');
     }
     next();
+}
+
+export const LOGOUT = async (req, res, next) => {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    res.cookie('AuthState', '', {expires: yesterday});
+    res.clearCookie('AuthState');
+    res.redirect('/index.html');
 }
 
 export const AUTH = async (req, res, next) => {

@@ -23,6 +23,7 @@ app.use(session({
   cookie: { secure: 'auto' }
 }));
 app.use('/', middleware.ROOT);
+app.use('/logout', middleware.LOGOUT);
 app.use('/auth.html', middleware.AUTH);
 app.use('/prescription.html', middleware.PRESCRIPTION);
 app.use('/public', staticDir);

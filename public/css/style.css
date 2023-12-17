@@ -44,7 +44,7 @@ form.login > label > select {
 a#logo {
     font-family: cursive;
     font-size: 300%;
-    position: absolute;
+    position: fixed;
     left: 1vw;
     top: 0px;
     text-decoration: none;
@@ -52,7 +52,7 @@ a#logo {
 }
 
 button#switch-auth-mode {
-    position: absolute;
+    position: fixed;
     right: 1vh;
     top: 1vh;
     font-size: x-large;
@@ -103,7 +103,7 @@ input#submit-update-user, input#submit-med-search {
 }
 
 a#back-button {
-    position: absolute;
+    position: fixed;
     left: 1vh;
     bottom: 1vh;
     font-size: x-large;
@@ -136,4 +136,11 @@ li.prescription {
 h3.prescription-header {
     margin-top: 5vh;
 
+}
+
+a#logout-link {
+    position: fixed;
+    right: 1vh;
+    bottom: 1vh;
+    font-size: x-large;
 }

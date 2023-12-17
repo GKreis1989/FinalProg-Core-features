@@ -26,8 +26,19 @@ prescribeForm.addEventListener('submit', async (e) => {
         }
     })
     const prescription = await res.json();
-    if(prescription.hasOwnProperty('_id')) window.location = 'individualUser.html';
-    else error(prescription.error)
+    if(!prescription.hasOwnProperty('_id')) return error(prescription.error)
+    const addedPrescriptionResponse = await fetch(`/prescription/patient/${userId}`, {
+        method: 'POST',
+        body: JSON.stringify({
+            prescriptionId: prescription._id
+        }),
+        headers: {
+            "content-type": "application/json"
+        }
+    })
+    const addedPrescription = await addedPrescriptionResponse.json();
+    if(!addedPrescription?.hasOwnProperty('_id')) return error(addedPrescription.error);
+    window.location = 'individualUser.html';
 })
 
 const getUser = async () => {
