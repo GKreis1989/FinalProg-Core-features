@@ -4,9 +4,13 @@ body {
     background-color: rgb(244, 242, 238);
 }
 
-header.index, header.auth {
+header {
+    margin-top: 15vh;
     font-size: x-large;
     font-family: 'Courier New', Courier, monospace;
+}
+
+header.index, header.auth {
     margin-top: 30vh;
 }
 
@@ -59,4 +63,67 @@ button#switch-auth-mode {
     height: 0 !important;
     width: 0 !important;
     position: absolute;
+}
+
+li.home-option {
+    font-size: large;
+    margin-bottom: 1vh;
+}
+
+ul {
+    list-style-type:none;
+    padding: 0;
+    margin: 0;
+}
+
+li.user-element {
+    margin-bottom: 2vh;
+}
+
+button.select-user {
+    font-size: large;
+    padding: 5px;
+}
+
+ul#user-list {
+    margin-top: 5vh;
+    max-height: 50vh;
+    overflow-y: scroll;
+}
+
+label.user-attr, label.user-attr > input, label.user-attr > select, label.search-med-param > input {
+    margin-bottom: 3vh;
+    font-size: large;
+}
+
+input#submit-update-user, input#submit-med-search {
+    margin-bottom: 20px;
+    font-size: large;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+a#back-button {
+    position: absolute;
+    left: 1vh;
+    bottom: 1vh;
+    font-size: x-large;
+}
+
+ul#medication-list {
+    text-align: left;
+    max-height: 30vh;
+    overflow-y: scroll;
+}
+
+ul#medication-list > li {
+    margin-bottom: 10px;
+}
+
+ul#medication-list > li > button {
+    font-size: large;
+}
+
+p#error-message {
+    font-size: large;
+    color: red;
 }

@@ -10,7 +10,6 @@ const dateOfBirthInput = $id('date-of-birth');
 const allergiesInput = $id('allergies');
 const switchAuthContent = $id('switch-auth-content');
 const switchAuthModeButton = $id('switch-auth-mode');
-const errorMessage = $id('error-message');
 const header = $id('header');
 
 let modeLogin = true;
@@ -66,15 +65,10 @@ loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     let authResponse = await (modeLogin ? requestLogin : requestRegister)();
     let user = await authResponse.json();
-    if(user.hasOwnProperty('role') && user.role == 'patient') user = await createPatient(user);
-    if(user.hasOwnProperty('_id')) window.location = '/home.html';
+    if(user.hasOwnProperty('role') && user.role == 'patient') user = await (await createPatient(user)).json();
+    if(user.hasOwnProperty('_id')) window.location = '/user.html';
     else {
-        errorMessage.innerText = user.error;
-        errorMessage.classList.remove('hidden');
-        setTimeout(() => {
-            errorMessage.innerText = '';
-            errorMessage.classList.add('hidden');
-        }, 2000)
+        error(user.error);
     }
 })
 

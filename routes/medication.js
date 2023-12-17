@@ -32,4 +32,16 @@ router.route('/:method/:value')
         }
     })
 
+router.route('/:objectId')
+    .get(async (req, res) => {
+        try {
+            const medication = await medicationData.getMedicationByObjectId(req.params.objectId);
+            res.status(200).json(medication);
+        } catch(error) {
+            console.error(error);
+            if(error instanceof helpers.CustomException) res.status(error.code).json({error: error.message});
+            else res.status(500).json({error: 'get medication server error'});
+        }
+    })
+
 export default router;

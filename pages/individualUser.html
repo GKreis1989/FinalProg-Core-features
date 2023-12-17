@@ -9,12 +9,44 @@
 <body>
     <header>
         <a href="/index.html" id="logo">A</a>
-        <h1>User</h1>
+        <h1 id="user-name">User</h1>
     </header>
     <main>
-        <ul id="individualUser">
-            
-        </ul>
+        <form id="individual-user">
+            <label for="first-name" class="user-attr">
+                First Name:
+                <input name="last-name" id="first-name">
+            </label>
+            <br>
+            <label for="last-name" class="user-attr">
+                Last Name:
+                <input name="last-name" id="last-name">
+            </label>
+            <br>
+            <label for="email-address" class="user-attr">
+                Email Address:
+                <input name="email-address" id="email-address">
+            </label class="user-attr">
+            <br>
+            <label id="role-label" for="role" class="user-attr">
+                Role:
+                <select name="role" id="role">
+                    <option value="admin">Admin</option>
+                    <option value="doctor">Doctor</option>
+                    <option value="medical professional">Medical Professional</option>
+                </select>
+            </label>
+            <input id="submit-update-user" type="submit">
+            <p class="patient-data hidden">Date of Birth: <p id="date-of-birth"></p></p>
+            <br>
+            <p class="patient-data hidden">Allergies: <p id="allergies"></p></p>
+            <br>
+            <p class="patient-data hidden">Gender: <p id="gender"></p></p>
+            <br>
+            <ul class="patient-data hidden" id="prescription-list"></ul>
+        </form>
+        <a class="hidden" href="/medications.html" id="prescription-link">Medications</a>
+        <a href="/users.html" id="back-button">Back To Users</a>
     </main>
     <footer>
         <script src="/public/js/main.js"></script>

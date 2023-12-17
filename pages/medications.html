@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asclepius - Home</title>
+    <link rel="stylesheet" href="/public/css/style.css">
+</head>
+<body>
+    <header>
+        <a href="/index.html" id="logo">A</a>
+        <h1>Medications</h1>
+        <h2 id="user-name">User</h2>
+    </header>
+    <main>
+        <form id="search-medication">
+            <label class="search-med-param" for="brand-name">
+                Brand Name:
+                <input name="brand-name" id="brand-name" type="text">
+            </label>
+            <br>
+            <label class="search-med-param" for="dosage-form">
+                Dosage Form:
+                <input name="dosage-form" id="dosage-form" type="text">
+            </label>
+            <br>
+            <label class="search-med-param" for="route">
+                Route:
+                <input name="route" id="route" type="text">
+            </label>
+            <br>
+            <label class="search-med-param" for="generic-name">
+                Generic Name:
+                <input name="generic-name" id="generic-name" type="text">
+            </label>
+            <br>
+            <input type="submit" id="submit-med-search">
+        </form>
+        <ul id="medication-list">
+
+        </ul>
+    </main>
+    <footer>
+        <script src="/public/js/main.js"></script>
+        <script src="/public/js/medications.js"></script>
+    </footer>
+</body>
+</html>

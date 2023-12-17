@@ -12,6 +12,9 @@ router.route('/')
             const filteredUsers = [];
             const role = requestingUser.role;
             allUsers.forEach(u => {
+                if(u._id.toString() === requestingUser._id) {
+                    return filteredUsers.push(u);
+                }
                 if(role == 'admin') filteredUsers.push(u);
                 else if(['medical professional', 'doctor'].includes(role) 
                     && helpers.shareClinic(requestingUser, u)) filteredUsers.push(u);
@@ -40,8 +43,10 @@ router.route('/')
     .put(async (req, res) => {
         try {
             const requestingUser = helpers.authenticateUser(req);
-            const { userId } = req.body;
-            if(userId?.toString() !== requestingUser._id?.toString() && requestingUser.role !== 'admin')
+            const { _id, role } = req.body;
+            if(role === 'patient') throw helpers.CustomException.unauthorized();
+            console.log(_id?.toString(), requestingUser._id)
+            if(_id.toString() !== requestingUser._id && requestingUser.role !== 'admin')
                 throw helpers.CustomException.unauthorized();
             const updatedUser = await userData.updateUser(req.body);
             req.session.user = updatedUser;
@@ -52,6 +57,19 @@ router.route('/')
             else res.status(500).json({error: 'update user server error'});
         }
     });
+
+router.route('/:userId')
+    .get(async (req, res) => {
+        try {
+            // const requestingUser = helpers.authenticateUser(req);
+            const user = await userData.getUserById(req.params.userId);
+            res.status(200).json(user);
+        } catch(error) {
+            console.error(error);
+            if(error instanceof helpers.CustomException) res.status(error.code).json({error: error.message});
+            else res.status(500).json({error: 'get all users server error'});
+        }
+    })
 
 router.route('/login')
     .post(async (req, res) => {
@@ -98,5 +116,17 @@ router.route('/clinic')
             else res.status(500).json({error: 'remove user from clinic clinic server error'});
         }
     })
+
+router.route('/me')
+    .get(async (req, res) => {
+        try {
+            const requestingUser = helpers.authenticateUser(req);
+            res.status(200).json(requestingUser);
+        } catch(error) {
+            console.error(error);
+            if(error instanceof helpers.CustomException) res.status(error.code).json({error: error.message});
+            else res.status(500).json({error: 'remove user from clinic clinic server error'});
+        }
+    });
 
 export default router;

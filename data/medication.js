@@ -8,7 +8,7 @@ const SEARCH_LIMIT = 200;
 
 // ! documentation: https://open.fda.gov/apis/drug/ndc/searchable-fields/
 
-const sampleMedicaiton = {
+const sampleMedication = {
     _id: new ObjectId('654199d077b5d9aa7fedbf6e'),
     // ! Deprecated:
     // ndc: '12345678',
@@ -96,7 +96,7 @@ export const cacheMedication = async (productId) => {
         "productId": productId
     });
     if(foundMedication?.hasOwnProperty('_id')) 
-        throw CustomException.alreadyExists("cached medication with product id", productId);
+        return foundMedication;
     foundMedication = await getMedicationByProductId(productId);
     Object.keys(foundMedication).forEach(field => {
         try {

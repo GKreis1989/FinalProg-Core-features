@@ -15,11 +15,11 @@ const samplePrescription = {
     instructions: ''
 };
 
-export const createPrescription = async ( medicaitonId, quantity, unit, refills, startDate, endDate, instructions ) => {
+export const createPrescription = async ( medicationId, quantity, unit, refills, startDate, endDate, instructions ) => {
 
     const prescription = await initPrescription();
     const newPrescription = validatePrescription({
-        medicaitonId,
+        medicationId,
         quantity,
         unit,
         refills,

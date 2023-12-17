@@ -153,10 +153,10 @@ export const validateClinicName = (clinicName) => {
 
 export const shareClinic = (userA, userB) => {
   if (!userA || !userB || typeof userA !== 'object' || typeof userB !== 'object') {
-    throw CustomException.badParameter('Share Clinic ') ;
+    return false;
   }
   if (!userA.clinics || !userB.clinics || !Array.isArray(userA.clinics) || !Array.isArray(userB.clinics)) {
-    throw CustomException.badParameter('Share Clinic ') ;
+    return false;
   }
   for (const clinicA of userA.clinics) {
     for (const clinicB of userB.clinics) {
@@ -222,7 +222,7 @@ export const validatePrescription = (prescription) => {
   if (!('endDate' in prescription) || new Date(prescription.endDate) < new Date(prescription.startDate)) {
     throw CustomException.badParameter('Invalid or missing endDate');
   }
-  if (!('instructions' in prescription) || !(prescription.instructions instanceof string)) {
+  if (!('instructions' in prescription) || !(typeof prescription.instructions == 'string')) {
     throw CustomException.badParameter('Invalid or missing instructions');
   }
   return prescription;
@@ -254,9 +254,10 @@ export const authenticateUser = (request) => {
 
 export const deduplicateMedications = (medications) => {
   const medicationObject = {};
+  console.log(medications);
   medications.forEach(med => {
     const hash = JSON.stringify(`${med.brandName}${med.dosageForm}${med.genericName}`).toLowerCase();
-    const routes = med.route.map(r => r.toLowerCase());
+    const routes = med?.route?.map(r => r.toLowerCase()) ?? [];
     if(medicationObject.hasOwnProperty(hash)) {
       medicationObject[hash].route.add(...routes);
     } else {

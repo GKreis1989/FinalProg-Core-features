@@ -18,6 +18,7 @@ const sampleUser = {
 export const createUser = async (firstName, lastName, emailAddress, password, role) => {
 
     const user = await initUser();
+    emailAddress = emailAddress?.toLowerCase();
     const newUser = {
         firstName,
         lastName,
@@ -40,6 +41,7 @@ export const createUser = async (firstName, lastName, emailAddress, password, ro
 
 export const loginUser = async (emailAddress, password) => {
 
+    emailAddress = emailAddress?.toLowerCase();
     emailAddress = validateEmail(emailAddress);
     validatePassword(password);
     const exception = CustomException.unauthenticated('with email address ' + emailAddress);
@@ -59,6 +61,7 @@ export const loginUser = async (emailAddress, password) => {
 export const getUserByEmailAddress = async (emailAddress) => {
 
     // TODO: input validation
+    emailAddress = emailAddress?.toLowerCase();
     const user = await initUser();
     const foundUser = await user.findOne({ emailAddress });
     if(!foundUser) throw CustomException.notFound("user with email address", emailAddress);
