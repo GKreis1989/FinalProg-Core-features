@@ -65,6 +65,14 @@ const main = async () => {
     });
     console.log(addUserToClinicResponse.status, addUserToClinicResponse.data);
     console.log();
+    
+    console.log('TESTING REMOVE USER FROM CLINIC');
+    const removeUserFromClinicResponse = await axios.put('http://localhost:3000/user/clinic',{
+        userId: getAllUsersResponse.data[0]._id,
+        clinicName: 'Test Clinic'
+    });
+    console.log(removeUserFromClinicResponse.status, removeUserFromClinicResponse.data);
+    console.log();
 
     await reset();
 

@@ -53,7 +53,7 @@ router.route('/login')
     })
 
 router.route('/clinic')
-    .post(async (req, res) => {
+    .post(async (req, res) => { // add user to clinic
         try {
             const requestingUser = helpers.authenticateUser(req);
             const { userId, clinicName } = req.body;
@@ -67,7 +67,21 @@ router.route('/clinic')
             if(error instanceof helpers.CustomException) res.status(error.code).json({error: error.message});
             else res.status(500).json({error: 'add user to clinic server error'});
         }
-
+    })
+    .put(async (req, res) => { // remove user from clinic
+        try {
+            const requestingUser = helpers.authenticateUser(req);
+            const { userId, clinicName } = req.body;
+            if(userId?.toString() !== requestingUser._id?.toString() && requestingUser.role !== 'admin')
+                throw helpers.CustomException.unauthorized();
+            const userResponse = await userData.removeUserFromClinic(userId, clinicName);
+            req.session.user = userResponse;
+            res.status(200).json(userResponse);
+        } catch(error) {
+            console.error(error);
+            if(error instanceof helpers.CustomException) res.status(error.code).json({error: error.message});
+            else res.status(500).json({error: 'remove user from clinic clinic server error'});
+        }
     })
 
 export default router;
