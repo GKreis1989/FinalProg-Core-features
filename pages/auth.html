@@ -31,10 +31,10 @@
             <label class="login-label hidden" for="role">
                 Role:
                 <select id="role" name="role">
-                    <option value="patient">Patient</option>
-                    <option value="medical professional">Medical Professional</option>
-                    <option value="doctor">Doctor</option>
                     <option value="admin">Admin</option>
+                    <option value="doctor">Doctor</option>
+                    <option value="medical professional">Medical Professional</option>
+                    <option value="patient">Patient</option>
                 </select>
             </label>
             <br class="login-label hidden">
@@ -48,8 +48,24 @@
                 <input id="confirm-password" name="confirm-password" type="TEMPpassword" class="authInput" placeholder="confirm password">
             </label>
             <br class="login-label hidden">
+            <label class="login-label-patient hidden" for="gender">
+                Gender
+                <input id="gender" name="gender" type="text" class="authInput">
+            </label>
+            <br class="login-label-patient hidden">
+            <label class="login-label-patient hidden" for="date-of-birth">
+                Date of Birth
+                <input id="date-of-birth" name="date-of-birth" type="date" class="authInput">
+            </label>
+            <br class="login-label-patient hidden">
+            <label class="login-label-patient hidden" for="allergies">
+                Allergies:
+                <input id="allergies" name="allergies" type="text" class="authInput" placeholder="peanuts, dairy" value="n/a">
+            </label>
+            <br class="login-label-patient hidden">
             <button id="submitLogin" type="submit">Submit</button>
         </form>
+        <p class="error-message hidden" id="error-message">Failed to Authenticate</p>
         <button id="switch-auth-mode">Register</button>
     </main>
     <footer>
