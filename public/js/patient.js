@@ -1,3 +1,10 @@
+import {
+    validateObjectId,
+    validateString,
+    validateStringArray,
+    validateEmail,
+  } from './inputValidation.js';
+
 const getAllPatients = async () => {
     try {
         const response = await fetch('/patient');
@@ -20,14 +27,24 @@ const createPatient = async () => {
     const allergiesInput = $id('allergies');
 
     createPatientBtn.addEventListener('click', async () => {
+       
+        const validatedUserId = validateObjectId('userId', userIdInput.value);
+        const validatedFirstName = validateString('firstName', firstNameInput.value);
+        const validatedLastName = validateString('lastName', lastNameInput.value);
+        const validatedEmailAddress = validateEmail(emailAddressInput.value);
+        const validatedDateOfBirth = validateString('dateOfBirth', dateOfBirthInput.value);
+        const validatedGender = validateString('gender', genderInput.value);
+        const validatedAllergies = validateStringArray('allergies', allergiesInput.value.split(','));
+       
+       
         const patientData = {
-            userId: userIdInput.value,
-            firstName: firstNameInput.value,
-            lastName: lastNameInput.value,
-            emailAddress: emailAddressInput.value,
-            dateOfBirth: dateOfBirthInput.value,
-            gender: genderInput.value,
-            allergies: allergiesInput.value,
+            userId: validatedUserId,
+            firstName: validatedFirstName,
+            lastName: validatedLastName,
+            emailAddress: validatedEmailAddress,
+            dateOfBirth: validatedDateOfBirth,
+            gender: validatedGender,
+            allergies: validatedAllergies,
         };
 
         try {
@@ -72,32 +89,43 @@ const updatePatient = async () => {
     const updatedAllergiesInput = $id('updatedAllergies');
 
     updatePatientBtn.addEventListener('click', async () => {
-        const patientId = patientIdInput.value;
-        const updatedData = {
-            firstName: updatedFirstNameInput.value,
-            lastName: updatedLastNameInput.value,
-            emailAddress: updatedEmailAddressInput.value,
-            dateOfBirth: updatedDateOfBirthInput.value,
-            gender: updatedGenderInput.value,
-            allergies: updatedAllergiesInput.value,
-        };
-
         try {
-            const response = await fetch(`/patient/${patientId}`, {
-                method: "PUT",
-                body: JSON.stringify(updatedData),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
+            const validatedPatientId = validateObjectId('patientId', patientIdInput.value);
+            const validatedFirstName = validateString('updatedFirstName', updatedFirstNameInput.value);
+            const validatedLastName = validateString('updatedLastName', updatedLastNameInput.value);
+            const validatedEmailAddress = validateEmail(updatedEmailAddressInput.value);
+            const validatedDateOfBirth = validateString('updatedDateOfBirth', updatedDateOfBirthInput.value);
+            const validatedGender = validateString('updatedGender', updatedGenderInput.value);
+            const validatedAllergies = validateStringArray('updatedAllergies', updatedAllergiesInput.value.split(','));
 
-            if (response.ok) {
-                console.log("Patient updated");
-            } else {
-                console.error("Patient update failed", response.statusText);
+            const updatedData = {
+                firstName: validatedFirstName,
+                lastName: validatedLastName,
+                emailAddress: validatedEmailAddress,
+                dateOfBirth: validatedDateOfBirth,
+                gender: validatedGender,
+                allergies: validatedAllergies,
+            };
+
+            try {
+                const response = await fetch(`/patient/${validatedPatientId}`, {
+                    method: "PUT",
+                    body: JSON.stringify(updatedData),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (response.ok) {
+                    console.log("Patient updated");
+                } else {
+                    console.error("Patient update failed", response.statusText);
+                }
+            } catch (error) {
+                console.error("Error during patient update", error);
             }
-        } catch (error) {
-            console.error("Error during patient update", error);
+        } catch (validationError) {
+            console.error("Validation error during patient update", validationError.message);
         }
     });
 };
