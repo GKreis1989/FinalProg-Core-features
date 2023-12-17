@@ -1,0 +1,113 @@
+
+> cs-546-lab-6@1.0.0 routes
+> METHOD=ROUTES TESTING=TRUE node test/index.js
+
+TESTING CREATE CLINIC
+200 { _id: '657e51938082403fab0cba05', name: 'Test Clinic' }
+
+TESTING EDIT CLINIC NAME
+200 { _id: '657e51938082403fab0cba05', name: 'New Test Clinic' }
+
+TESTING GET CLINIC BY NAME
+200 { _id: '657e51938082403fab0cba05', name: 'New Test Clinic' }
+
+TESTING GET ALL CLINICS
+200 [
+  { _id: '657e51938082403fab0cba05', name: 'New Test Clinic' },
+  { _id: '657e51938082403fab0cba06', name: 'Test Clinic 2' },
+  { _id: '657e51938082403fab0cba07', name: 'Test Clinic 3' },
+  { _id: '657e51938082403fab0cba08', name: 'Test Clinic 4' }
+]
+
+TESTING SEARCH MEDICATION
+200 [
+  {
+    productId: '66993-019_d020dd21-c70e-4b40-8a14-fc2a2b77ca98',
+    brandName: 'Albuterol Sulfate HFA',
+    dosageForm: 'AEROSOL, METERED',
+    route: [ 'respiratory (inhalation)' ],
+    genericName: 'albuterol sulfate'
+  }
+]
+
+TESTING GET MEDICATION BY PRODUCT ID
+200 {
+  productId: '66993-019_d020dd21-c70e-4b40-8a14-fc2a2b77ca98',
+  brandName: 'Albuterol Sulfate HFA',
+  dosageForm: 'AEROSOL, METERED',
+  route: [ 'RESPIRATORY (INHALATION)' ],
+  genericName: 'albuterol sulfate'
+}
+
+TESTING CREATE USER
+200 {
+  _id: '657e51978082403fab0cba09',
+  firstName: 'patrick',
+  lastName: 'hill',
+  emailAddress: 'phill@stevens.edu',
+  role: 'admin',
+  associatedClinics: []
+}
+
+TESTING CREATE PATIENT
+200 {
+  _id: '657e51978082403fab0cba0a',
+  firstName: 'patrick',
+  lastName: 'hill',
+  emailAddress: 'phill@stevens.edu',
+  role: 'admin',
+  associatedClinics: [],
+  userId: '657e51978082403fab0cba09',
+  dateOfBirth: '1916-06-17T05:00:00.000Z',
+  gender: 'male',
+  allergies: [ 'peanuts' ],
+  prescriptions: []
+}
+
+TESTING UPDATE PATIENT
+200 {
+  _id: '657e51978082403fab0cba0a',
+  firstName: 'patrick',
+  lastName: 'hill',
+  emailAddress: 'phill@stevens.edu',
+  role: 'admin',
+  associatedClinics: [],
+  userId: '657e51978082403fab0cba09',
+  dateOfBirth: '1916-06-17T05:00:00.000Z',
+  gender: 'n/a',
+  allergies: [ 'peanuts' ],
+  prescriptions: []
+}
+
+TESTING LOGIN PATIENT
+200 {
+  _id: '657e51978082403fab0cba09',
+  firstName: 'patrick',
+  lastName: 'hill',
+  emailAddress: 'phill@stevens.edu',
+  role: 'admin',
+  associatedClinics: []
+}
+
+TESTING GET ALL USERS
+200 [
+  {
+    _id: '657e51978082403fab0cba09',
+    firstName: 'patrick',
+    lastName: 'hill',
+    emailAddress: 'phill@stevens.edu',
+    role: 'admin',
+    associatedClinics: []
+  }
+]
+
+TESTING ADD USER TO CLINIC
+200 {
+  _id: '657e51978082403fab0cba09',
+  firstName: 'patrick',
+  lastName: 'hill',
+  emailAddress: 'phill@stevens.edu',
+  role: 'admin',
+  associatedClinics: [ 'Test Clinic' ]
+}
+

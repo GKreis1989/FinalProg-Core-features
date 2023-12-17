@@ -12,9 +12,10 @@ const samplePrescription = {
     refills: 2,
     startDate: new Date('2023-01-01'),
     endDate: new Date('2023-01-31'),
+    instructions: ''
 };
 
-export const createPrescription = async ( medicaitonId, quantity, unit, refills, startDate, endDate ) => {
+export const createPrescription = async ( medicaitonId, quantity, unit, refills, startDate, endDate, instructions ) => {
 
     const prescription = await initPrescription();
     const newPrescription = validatePrescription({
@@ -23,7 +24,8 @@ export const createPrescription = async ( medicaitonId, quantity, unit, refills,
         unit,
         refills,
         startDate,
-        endDate
+        endDate,
+        instructions
     });
     const createPrescriptionResponse = await prescription.insertOne(newPrescription);
     if(createPrescriptionResponse.acknowledged) {

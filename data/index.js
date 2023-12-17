@@ -5,9 +5,9 @@ import * as patientData from "./patient.js";
 import * as prescriptionData from "./prescription.js";
 
 const dataFunctions = {
-    ...userData,
-    ...medicationData,
     ...clinicData,
+    ...medicationData,
+    ...userData,
     ...patientData,
     ...prescriptionData
 };

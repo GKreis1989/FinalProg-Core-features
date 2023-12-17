@@ -83,7 +83,7 @@ export const getAllUsers = async () => {
 
     // TODO: input validation
     const user = await initUser();
-    const allUsers = (await user.find({ })).toArray();
+    const allUsers = await (await user.find({ })).toArray();
     allUsers.forEach(user => {
         delete user['password'];
     })

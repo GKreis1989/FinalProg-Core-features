@@ -190,16 +190,14 @@ export const validatePatient = (patient) => {
   if (!patient || typeof patient !== 'object') {
     throw CustomException.badParameter('Invalid patient object');
   }
-  if (!('userId' in patient) || typeof patient.userId !== 'object') {
-    throw CustomException.badParameter('Invalid or missing userId');
-  }
-  if (!('dateOfBirth' in patient) || !(patient.dateOfBirth instanceof Date)) {
+  patient.userId = validateObjectId('userId', patient.userId);
+  if (!(patient.hasOwnProperty('dateOfBirth')) || new Date(patient.dateOfBirth) >= new Date()) {
     throw CustomException.badParameter('Invalid or missing dateOfBirth');
   }
-  if (!('gender' in patient) || typeof patient.gender !== 'string') {
+  if (!(patient.hasOwnProperty('gender')) || typeof patient.gender !== 'string') {
     throw CustomException.badParameter('Invalid or missing gender');
   }
-  if (!('allergies' in patient) || !Array.isArray(patient.allergies)) {
+  if (!(patient.hasOwnProperty('allergies')) || !Array.isArray(patient.allergies)) {
     throw CustomException.badParameter('Invalid or missing allergies');
   }
   return patient;
@@ -218,11 +216,14 @@ export const validatePrescription = (prescription) => {
   if (!('refills' in prescription) || typeof prescription.refills !== 'number' || prescription.refills < 0) {
     throw CustomException.badParameter('Invalid or missing refills');
   }
-  if (!('startDate' in prescription) || !(prescription.startDate instanceof Date)) {
+  if (!('startDate' in prescription) || new Date(prescription.startDate) < new Date()) {
     throw CustomException.badParameter('Invalid or missing startDate');
   }
-  if (!('endDate' in prescription) || !(prescription.endDate instanceof Date)) {
+  if (!('endDate' in prescription) || new Date(prescription.endDate) < new Date(prescription.startDate)) {
     throw CustomException.badParameter('Invalid or missing endDate');
+  }
+  if (!('instructions' in prescription) || !(prescription.instructions instanceof string)) {
+    throw CustomException.badParameter('Invalid or missing instructions');
   }
   return prescription;
 };
@@ -249,4 +250,25 @@ export const authenticateUser = (request) => {
     return request.session.user;
   }
   throw CustomException.unauthenticated('');
+}
+
+export const deduplicateMedications = (medications) => {
+  const medicationObject = {};
+  medications.forEach(med => {
+    const hash = JSON.stringify(`${med.brandName}${med.dosageForm}${med.genericName}`).toLowerCase();
+    const routes = med.route.map(r => r.toLowerCase());
+    if(medicationObject.hasOwnProperty(hash)) {
+      medicationObject[hash].route.add(...routes);
+    } else {
+      medicationObject[hash] = {
+        route: new Set(routes),
+        value: med
+      };
+    }
+  })
+  const dedupedMedications = Object.values(medicationObject).map(obj => {
+    obj.value.route = Array.from(obj.route);
+    return obj.value;
+  });
+  return dedupedMedications;
 }

@@ -39,7 +39,7 @@ const main = async () => {
     const today = new Date();
     const yearFromNow = new Date();
     yearFromNow.setFullYear(yearFromNow.getFullYear() + 1);
-    const newPrescription = await prescriptionData.createPrescription(medicationId, 5, 'pill', 5, today, yearFromNow);
+    const newPrescription = await prescriptionData.createPrescription(medicationId, 5, 'pill', 5, today, yearFromNow, 'take once daily');
     prescriptionId = newPrescription._id;
   } catch(e) {
     if(e instanceof CustomException) {

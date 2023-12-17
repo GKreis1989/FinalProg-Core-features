@@ -1,6 +1,6 @@
 import { ObjectId } from "bson";
 import { medication as initMedication } from "../config/mongoCollections.js";
-import { CustomException, validateObjectId, validateStringArray, validateString, validateMedicationSearchParam } from "../helpers.js";
+import { CustomException, validateObjectId, validateStringArray, validateString, validateMedicationSearchParam, deduplicateMedications } from "../helpers.js";
 import axios from 'axios';
 
 const BASE_URL = 'https://api.fda.gov/drug/ndc.json';
@@ -25,7 +25,13 @@ const sampleMedicaiton = {
 
 const paginatedEndpoint = async (endpoint, offset=0) => {
     const initial = [];
-    const response = await axios.get(`${endpoint}&skip=${offset}`);
+    let response;
+    try {
+        response = await axios.get(`${endpoint}&skip=${offset}`);
+    } catch(e) {
+        return initial;
+    }
+    if(!response.data.hasOwnProperty('results')) return initial;
     initial.push(...response.data.results);
     const remaining = (response?.data?.meta?.results?.total ?? 0) - offset - SEARCH_LIMIT;
     if(remaining > 0) initial.push(...(await paginatedEndpoint(endpoint, offset + SEARCH_LIMIT)));
@@ -36,7 +42,7 @@ export const searchMedications = async (searchParam) => {
     const searchString = validateMedicationSearchParam(searchParam);
     const url = `${BASE_URL}?search=${searchString}&limit=${SEARCH_LIMIT}`
     const res = await paginatedEndpoint(url);
-    if(!res?.length) throw CustomException.notFound("medications with keyword", keyword);
+    if(!res?.length) throw CustomException.notFound("medication with", `${Object.keys(searchParam).join()} ${Object.values(searchParam).join()}`);
     const foundMedications = res.map(med => {
         return {
             productId: med?.product_id,
@@ -46,7 +52,8 @@ export const searchMedications = async (searchParam) => {
             genericName: med?.generic_name
         }
     })
-    return foundMedications;
+    
+    return deduplicateMedications(foundMedications);
 }
 
 export const getMedicationByProductId = async (productId) => {
@@ -58,7 +65,7 @@ export const getMedicationByProductId = async (productId) => {
     });
     if(foundMedication?.hasOwnProperty('_id')) return foundMedication;
     const res = await paginatedEndpoint(`${BASE_URL}?search=product_id:"${productId}"&limit=${SEARCH_LIMIT}`);
-    if(!res?.length) throw CustomException.notFound("medication with id", productId);
+    if(!res?.length) throw CustomException.notFound("medication with productId", productId);
     if(res.length !== 1) throw CustomException.badParameter("productId");
     const med = res[0];
     return {

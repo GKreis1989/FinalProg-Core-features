@@ -1,6 +1,6 @@
 import { ObjectId } from "bson";
 import { patient as initPatient } from "../config/mongoCollections.js";
-import { CustomException, validateObjectId, validatePatient } from "../helpers.js";
+import { CustomException, validateObjectId, validatePatient, validateUpdatePatient } from "../helpers.js";
 import { getPrescriptionById } from "./prescription.js";
 
 const samplePatient = {
@@ -63,7 +63,7 @@ export const updatePatient = async (updatePatientParams) => {
         { $set: updatePatientParams }
     );
     if(!updatePatientResponse.hasOwnProperty('_id')) throw CustomException.serverError("update patient");
-    return await getPatientByUserId(updatePatientResponse._id.toString());
+    return await getPatientByUserId(oId.toString());
 
 };
 
