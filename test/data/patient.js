@@ -30,7 +30,7 @@ const main = async () => {
       'clause',
       'santa@stevens.edu',
       'Northpole1225!',
-      'doctor'
+      'patient'
     );
     userId = newUser._id;
     const medicationSearchResults = await medicationData.searchMedications({ "genericName": "albuterol" });
@@ -62,34 +62,8 @@ const main = async () => {
   console.log();
 
   try {
-    console.log("TESTING GET PATIENT BY ID");
-    const res = await patientData.getPatientByUserId(userId);
-    console.log(res);
-  } catch(e) {
-    if(e instanceof CustomException) {
-      console.log(e.code, e.message);
-    }
-    else console.log(e);
-  }
-
-  console.log();
-
-  try {
     console.log("TESTING ADD PRESCRIPTION TO PATIENT");
     const res = await patientData.addPrescriptionToPatient(userId, prescriptionId);
-    console.log(res);
-  } catch(e) {
-    if(e instanceof CustomException) {
-      console.log(e.code, e.message);
-    }
-    else console.log(e);
-  }
-
-  console.log();
-
-  try {
-    console.log("TESTING REMOVE PRESCRIPTION FROM PATIENT");
-    const res = await patientData.removePrescriptionFromPatient(userId, prescriptionId);
     console.log(res);
   } catch(e) {
     if(e instanceof CustomException) {

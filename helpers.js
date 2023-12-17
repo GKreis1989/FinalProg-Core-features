@@ -155,17 +155,17 @@ export const shareClinic = (userA, userB) => {
   if (!userA || !userB || typeof userA !== 'object' || typeof userB !== 'object') {
     return false;
   }
-  if (!userA.clinics || !userB.clinics || !Array.isArray(userA.clinics) || !Array.isArray(userB.clinics)) {
+  if (!userA.associatedClinics || !userB.associatedClinics || !Array.isArray(userA.associatedClinics) || !Array.isArray(userB.associatedClinics)) {
     return false;
   }
-  for (const clinicA of userA.clinics) {
-    for (const clinicB of userB.clinics) {
+  for (const clinicA of userA.associatedClinics) {
+    for (const clinicB of userB.associatedClinics) {
       if (clinicA.id === clinicB.id) {
         return true;
       }
     }
   }
-  return false;
+    return false;
 };
 
 const validMedicationSearchParams = {
@@ -254,7 +254,6 @@ export const authenticateUser = (request) => {
 
 export const deduplicateMedications = (medications) => {
   const medicationObject = {};
-  console.log(medications);
   medications.forEach(med => {
     const hash = JSON.stringify(`${med.brandName}${med.dosageForm}${med.genericName}`).toLowerCase();
     const routes = med?.route?.map(r => r.toLowerCase()) ?? [];

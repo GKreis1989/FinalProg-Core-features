@@ -12,7 +12,7 @@ router.route('/:id')
         try {
             const requestingUser = helpers.authenticateUser(req);
             const user = await userData.getUserById(req.params.id);
-            if(requestingUser.role != 'doctor' || !helpers.shareClinic(requestingUser.role, user)) {
+            if(requestingUser.role != 'doctor' || !helpers.shareClinic(requestingUser, user)) {
                 if(requestingUser.role != 'admin') {
                     throw helpers.CustomException.unauthorized();
                 }

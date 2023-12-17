@@ -127,3 +127,13 @@ p#error-message {
     font-size: large;
     color: red;
 }
+
+li.prescription {
+    border-top-style: solid;
+    border-bottom: solid;
+}
+
+h3.prescription-header {
+    margin-top: 5vh;
+
+}

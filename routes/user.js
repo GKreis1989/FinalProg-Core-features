@@ -85,6 +85,24 @@ router.route('/login')
         }
     })
 
+router.route('/clinic/join')
+    .post(async (req, res) => { // add user to clinic
+        try {
+            const requestingUser = helpers.authenticateUser(req);
+            const userId = requestingUser._id;
+            const { clinicName } = req.body;
+            if(userId?.toString() !== requestingUser._id?.toString() && requestingUser.role !== 'admin')
+                throw helpers.CustomException.unauthorized();
+            const userResponse = await userData.addUserToClinic(userId, clinicName);
+            req.session.user = userResponse;
+            res.status(200).json(userResponse);
+        } catch(error) {
+            console.error(error);
+            if(error instanceof helpers.CustomException) res.status(error.code).json({error: error.message});
+            else res.status(500).json({error: 'add user to clinic server error'});
+        }
+    })
+
 router.route('/clinic')
     .post(async (req, res) => { // add user to clinic
         try {

@@ -13,6 +13,7 @@ let user;
 
 const addPrescription = async (prescription) => {
     const li = document.createElement('li');
+    li.classList.add('prescription')
     console.log(prescription);
     const medication = await (await fetch(`/medication/${prescription.medicationId}`)).json();
     const p1 = document.createElement('p');
@@ -35,7 +36,7 @@ const getUserById = async (id) => {
     if(user.role === 'patient') {
         const patient = await (await fetch(`/patient/${id}`)).json();
         console.log(patient);
-        dateOfBirth.innerText = patient.dateOfBirth;
+        dateOfBirth.innerText = new Date(patient.dateOfBirth).toDateString();
         allergies.innerText = patient.allergies.reduce((a, b) => a + ' ' + b, '');
         gender.innerText = patient.gender;
         $id('role-label').classList.add('hidden');

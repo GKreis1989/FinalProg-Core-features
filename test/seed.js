@@ -40,8 +40,10 @@ const main = async () => {
     const medicationSearchResults = await medicationData.searchMedications({ "genericName": "albuterol" });
     const cachedMedication = await medicationData.cacheMedication(medicationSearchResults[0].productId);
     await createClinic('new clinic');
+    userData.addUserToClinic(userId, 'new clinic');
     const medicationId = cachedMedication._id;
     const today = new Date();
+    today.setDate(today.getDate() + 1)
     const yearFromNow = new Date();
     yearFromNow.setFullYear(yearFromNow.getFullYear() + 1);
     const newPrescription = await prescriptionData.createPrescription(medicationId, 5, 'inhaler', 5, today, yearFromNow, 'take once daily');
@@ -84,10 +86,12 @@ const main = async () => {
       'patient'
     );
     userId = newUser._id;
+    userData.addUserToClinic(userId, 'new clinic');
     const medicationSearchResults = await medicationData.searchMedications({ "genericName": "ibuprofen" });
     const cachedMedication = await medicationData.cacheMedication(medicationSearchResults[0].productId);
     const medicationId = cachedMedication._id;
     const today = new Date();
+    today.setDate(today.getDate() + 1)
     const yearFromNow = new Date();
     yearFromNow.setFullYear(yearFromNow.getFullYear() + 1);
     const newPrescription = await prescriptionData.createPrescription(medicationId, 5, 'pill', 5, today, yearFromNow, 'take once daily');
