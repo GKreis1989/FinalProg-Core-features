@@ -9,34 +9,48 @@
 <body>
     <header class="auth">
         <a href="/index.html" id="logo">A</a>
-        <h1>Login</h1>
+        <h1 id="header">Login</h1>
     </header>
     <main class="auth">
         <form class="login" id="loginForm">
+            <label class="login-label hidden" for="firstName">
+                First Name:
+                <input id="firstName" name="firstName" type="text" class="authInput" placeholder="Denzel">
+            </label>
+            <br class="login-label hidden">
+            <label class="login-label hidden" for="lastName">
+                Last Name:
+                <input id="lastName" name="lastName" type="text" class="authInput" placeholder="Washington">
+            </label>
+            <br class="login-label hidden">
             <label for="emailAddress">
                 Email Address:
-                <input 
-                    id="emailAddress" 
-                    name="emailAddress" 
-                    type="text"
-                    class="authInput"
-                    placeholder="user@example.com"
-                >
+                <input id="emailAddress" name="emailAddress" type="text" class="authInput" placeholder="user@example.com">
             </label>
             <br>
+            <label class="login-label hidden" for="role">
+                Role:
+                <select id="role" name="role">
+                    <option value="patient">Patient</option>
+                    <option value="medical professional">Medical Professional</option>
+                    <option value="doctor">Doctor</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </label>
+            <br class="login-label hidden">
             <label for="password">
                 Password:
-                <input 
-                    id="password" 
-                    name="password" 
-                    type="password"
-                    class="authInput"
-                    placeholder="password"
-                >
+                <input id="password" name="password" type="TEMPpassword" class="authInput" placeholder="password">
             </label>
             <br>
+            <label class="login-label hidden" for="confirm-password">
+                Confirm Password:
+                <input id="confirm-password" name="confirm-password" type="TEMPpassword" class="authInput" placeholder="confirm password">
+            </label>
+            <br class="login-label hidden">
             <button id="submitLogin" type="submit">Submit</button>
         </form>
+        <button id="switch-auth-mode">Register</button>
     </main>
     <footer>
         <script src="/public/js/main.js"></script>

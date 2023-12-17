@@ -2,6 +2,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import session from 'express-session';
 import * as uuid from 'uuid';
+import { user, clinic, medication, patient, prescription } from './config/mongoCollections.js';
 import * as middleware from './middleware.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -14,8 +15,16 @@ import configRoutes from './routes/index.js';
 const staticDir = express.static(__dirname + '/public');
 const pagesDir = express.static(__dirname + '/pages');
 
-app.use('/', middleware.ROOT);
-app.use('/auth.html', middleware.AUTH);
+const reset = async () => {
+  await (await user()).deleteMany({});
+  await (await clinic()).deleteMany({});
+  await (await medication()).deleteMany({});
+  await (await patient()).deleteMany({});
+  await (await prescription()).deleteMany({});
+}
+
+await reset();
+
 app.use(session({
   name: 'AuthState',
   secret: uuid.v4(),
@@ -23,6 +32,8 @@ app.use(session({
   saveUninitialized: false,
   cookie: { secure: 'auto' }
 }));
+app.use('/', middleware.ROOT);
+app.use('/auth.html', middleware.AUTH);
 app.use('/public', staticDir);
 app.use('/', pagesDir);
 app.use(express.json());

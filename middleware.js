@@ -1,7 +1,9 @@
 import * as helpers from './helpers.js';
 
 export const ROOT = async (req, res, next) => {
-    if(['/index.html', '/auth.html'].includes(req.originalUrl)
+    const date = new Date();
+    console.log(`${date.toISOString()} ${req.method} ${req.originalUrl}`)
+    if(['/index.html', '/auth.html', '/user/login', '/user'].includes(req.originalUrl)
     || req.originalUrl.endsWith(".css") || req.originalUrl.endsWith(".js")) {
         return next();
     }

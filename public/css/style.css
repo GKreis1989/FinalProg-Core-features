@@ -28,8 +28,13 @@ input.authInput {
     font-size: x-large;
 }
 
-form.login > label > input {
+form.login > label > input  {
     margin-bottom: 2.5vh;
+}
+
+form.login > label > select {
+    margin-bottom: 2.5vh;
+    font-size: x-large;
 }
 
 a#logo {
@@ -40,4 +45,18 @@ a#logo {
     top: 0px;
     text-decoration: none;
     color: darkslateblue;
+}
+
+button#switch-auth-mode {
+    position: absolute;
+    right: 1vh;
+    top: 1vh;
+    font-size: x-large;
+}
+
+.hidden {
+    visibility: hidden;
+    height: 0 !important;
+    width: 0 !important;
+    position: absolute;
 }

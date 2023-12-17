@@ -246,6 +246,8 @@ export const authenticateUser = (request) => {
     };
   }
 
+  console.log(request.session);
+
   if(request?.session?.user.hasOwnProperty('role')) {
     return request.session.user;
   }
