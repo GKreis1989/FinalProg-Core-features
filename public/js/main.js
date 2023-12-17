@@ -34,13 +34,86 @@ const validatePassword = (password) => {
 };
 
 const validateFirstName = (firstName) => {
-  return firstName;
-}
+  const err = new Error('Invalid first name.');
 
-const validateLastName = (lastName) => {
-  return lastName;
-}
+  if (!firstName || typeof firstName !== 'string') {
+    throw err;
+  }
+
+  const trimmedFirstName = firstName.trim();
+
+  if (!trimmedFirstName.length) {
+    throw err;
+  }
+
+  return trimmedFirstName;
+};
+
+const validateLastName = (firstName) => {
+  const err = new Error('Invalid Last name.');
+
+  if (!firstName || typeof firstName !== 'string') {
+    throw err;
+  }
+  const trimmedFirstName = firstName.trim();
+
+  if (!trimmedFirstName.length) {
+    throw err;
+  }
+  return trimmedFirstName;
+};
 
 const validaterole = (role) => {
-  return role;
+  const roles = ["doctor", "medical professional", "patient", "admin"];
+  const trimmedRole = role.toLowerCase().trim();
+
+  if (!roles.includes(trimmedRole)) {
+    throw new Error('Invalid Role');
+  }
+  return trimmedRole;
 }
+
+const validatePatient = (patient) => {
+  if (!patient.hasOwnProperty('dateOfBirth') || new Date(patient.dateOfBirth) >= new Date()) {
+    throw new Error('Invalid or missing dateOfBirth');
+  }
+
+  if (!patient.hasOwnProperty('gender') || typeof patient.gender !== 'string') {
+    throw new Error('Invalid or missing gender');
+  }
+
+  if (!patient.hasOwnProperty('allergies') || !Array.isArray(patient.allergies)) {
+    throw new Error('Invalid or missing allergies');
+  }
+
+  return patient;
+};
+
+
+ const validatePrescription = (prescription) => {
+  if (!('quantity' in prescription) || typeof prescription.quantity !== 'number' || prescription.quantity <= 0 || prescription.quantity > 400) {
+    throw new Error('Invalid or missing quantity');
+  }
+
+  if (!('unit' in prescription) || typeof prescription.unit !== 'string') {
+    throw new Error('Invalid or missing unit');
+  }
+
+  if (!('refills' in prescription) || typeof prescription.refills !== 'number' || prescription.refills <= 0 || prescription.refills > 50) {
+    throw new Error('Invalid or missing refills');
+  }
+
+  if (!('startDate' in prescription) || new Date(prescription.startDate) < new Date()) {
+    throw new Error('Invalid or missing startDate');
+  }
+
+  if (!('endDate' in prescription) || new Date(prescription.endDate) < new Date(prescription.startDate)) {
+    throw new Error('Invalid or missing endDate');
+  }
+
+  if (!('instructions' in prescription) || typeof prescription.instructions !== 'string' || prescription.instructions.length > 500 ) {
+    throw new Error('Invalid or missing instructions');
+  }
+
+  return prescription;
+};
