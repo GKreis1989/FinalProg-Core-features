@@ -10,7 +10,6 @@ const userName = $id('user-name');
 prescribeForm.addEventListener('submit', async (e) => {
     try {
         e.preventDefault();
-        // TODO: quantity, unit, refills, startDate, endDate, instructions
         const userId = window.localStorage['currentUser'];
         const [start, end] = validateStartAndEndDates(startDate.value, endDate.value);
         const res = await fetch(`/prescription/${userId}`, {

@@ -6,11 +6,7 @@
     "type": "module",
     "scripts": {
         "start": "node app.js",
-        "server-test": "TESTING=TRUE node app.js",
-        "test": "TESTING=TRUE node test/index.js",
-        "data": "METHOD=DATA TESTING=TRUE node test/index.js",
-        "routes": "METHOD=ROUTES TESTING=TRUE node test/index.js",
-        "seed": "node test/seed.js"
+        "seed": "node seed.js"
     },
     "license": "ISC",
     "dependencies": {

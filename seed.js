@@ -1,11 +1,11 @@
-import { CustomException } from "../helpers.js";
-import * as patientData from "../data/patient.js";
-import * as userData from "../data/user.js";
-import * as prescriptionData from "../data/prescription.js";
-import * as medicationData from "../data/medication.js";
-import { patient as initPatient, user as initUser, prescription as initPrescription, medication as initMedication, clinic as initClinic } from "../config/mongoCollections.js";
-import { closeConnection } from "../config/mongoConnection.js";
-import { createClinic } from "../data/clinic.js";
+import { CustomException } from "./helpers.js";
+import * as patientData from "./data/patient.js";
+import * as userData from "./data/user.js";
+import * as prescriptionData from "./data/prescription.js";
+import * as medicationData from "./data/medication.js";
+import { patient as initPatient, user as initUser, prescription as initPrescription, medication as initMedication, clinic as initClinic } from "./config/mongoCollections.js";
+import { closeConnection } from "./config/mongoConnection.js";
+import { createClinic } from "./data/clinic.js";
 
 const main = async () => {
 
@@ -57,7 +57,6 @@ const main = async () => {
 
   try {
     const res = await patientData.createPatient(await userData.getUserById(userId), new Date('10/12/1995'), 'male', ['peanuts']);
-    console.log(res);
   } catch(e) {
     if(e instanceof CustomException) {
       console.log(e.code, e.message);
@@ -65,11 +64,9 @@ const main = async () => {
     else console.log(e);
   }
 
-  console.log();
 
   try {
     const res = await patientData.addPrescriptionToPatient(userId, prescriptionId);
-    console.log(res);
   } catch(e) {
     if(e instanceof CustomException) {
       console.log(e.code, e.message);
@@ -105,19 +102,15 @@ const main = async () => {
 
   try {
     const res = await patientData.createPatient(await userData.getUserById(userId), new Date('10/12/1995'), 'male', ['peanuts']);
-    console.log(res);
   } catch(e) {
     if(e instanceof CustomException) {
       console.log(e.code, e.message);
     }
     else console.log(e);
   }
-
-  console.log();
 
   try {
     const res = await patientData.addPrescriptionToPatient(userId, prescriptionId);
-    console.log(res);
   } catch(e) {
     if(e instanceof CustomException) {
       console.log(e.code, e.message);
@@ -125,7 +118,6 @@ const main = async () => {
     else console.log(e);
   }
 
-  console.log();
   try {
     const newUser = await userData.createUser(
       'Chris',
@@ -142,8 +134,6 @@ const main = async () => {
     }
     else console.log(e);
   }
-
-  console.log();
 
   try {
     const newUser = await userData.createUser(
@@ -213,6 +203,8 @@ const main = async () => {
     }
     else console.log(e);
   }
+
+  console.log('seed data successfully created');
 }
 
 await main();
