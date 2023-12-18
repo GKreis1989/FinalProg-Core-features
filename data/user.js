@@ -2,6 +2,9 @@ import { ObjectId } from "bson";
 import { user as initUser } from "../config/mongoCollections.js";
 import { CustomException, validateEmail, validatePassword, validateObjectId, validateUser, validateUpdateUser } from "../helpers.js";
 import { findClinicByName } from "./clinic.js";
+import * as bcrypt from "bcrypt";
+
+const rounds = 10;
 
 const sampleUser = {
     _id: new ObjectId('654199d077b5d9aa7fedbf6b'),
@@ -28,12 +31,12 @@ export const createUser = async (firstName, lastName, emailAddress, password, ro
         associatedClinics: []
     };
     validateUser(newUser);
-    // TODO: input validation
+    newUser.password = await bcrypt.hash(password, rounds);
     const existing = await user.findOne({ emailAddress: emailAddress });
     if(existing) throw CustomException.alreadyExists('user with email', emailAddress);
     const createUserResponse = await user.insertOne(newUser);
     if(createUserResponse.acknowledged) {
-        return await getUserById(createUserResponse.insertedId);
+        return await loginUser(emailAddress, password);
     }
     throw CustomException.serverError('add user');
 
@@ -52,16 +55,15 @@ export const loginUser = async (emailAddress, password) => {
     if(!foundUser?._id) throw exception
     const foundPassword = foundUser.password;
     delete foundUser['password'];
-    const compare = (a, b) => a === b;
-    if(compare(foundPassword, password)) return foundUser;
+    const success = await bcrypt.compare(password, foundPassword);
+    if(success) return foundUser;
     throw exception;
 
 };
 
 export const getUserByEmailAddress = async (emailAddress) => {
 
-    // TODO: input validation
-    emailAddress = emailAddress?.toLowerCase();
+    emailAddress = validateEmail(emailAddress?.toLowerCase());
     const user = await initUser();
     const foundUser = await user.findOne({ emailAddress });
     if(!foundUser) throw CustomException.notFound("user with email address", emailAddress);
@@ -72,7 +74,6 @@ export const getUserByEmailAddress = async (emailAddress) => {
 
 export const getUserById = async (userId) => {
 
-    // TODO: input validation
     const user = await initUser();
     const oId = validateObjectId('userId', userId);
     const foundUser = await user.findOne({ _id: oId });
@@ -84,7 +85,6 @@ export const getUserById = async (userId) => {
 
 export const getAllUsers = async () => {
 
-    // TODO: input validation
     const user = await initUser();
     const allUsers = await (await user.find({ })).toArray();
     allUsers.forEach(user => {
@@ -116,7 +116,6 @@ export const updateUser = async (updateUserParams) => {
 
 export const removeUser = async (userId) => {
 
-    // TODO: input validation
     const user = await initUser();
     const foundUser = await getUserById(userId);
     const deleteResponse = await user.deleteOne({ _id: foundUser._id });

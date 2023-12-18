@@ -223,6 +223,7 @@ export const validatePrescription = (prescription) => {
     throw CustomException.badParameter('Invalid or missing endDate');
   }
   if (!('instructions' in prescription) || !(typeof prescription.instructions == 'string')) {
+    console.log(prescription.instructions);
     throw CustomException.badParameter('Invalid or missing instructions');
   }
   return prescription;

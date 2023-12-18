@@ -33,21 +33,25 @@ const selectMedication = async (e) => {
 }
 
 searchForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    // TODO: validate brandname, dosageform, route, genericname
-    let meds;
-    if(brandName.value) meds = await searchMedications('brandName', brandName.value);
-    if(dosageForm.value) meds = await searchMedications('dosageForm', dosageForm.value);
-    if(route.value) meds = await searchMedications('route', route.value);
-    if(genericName.value) meds = await searchMedications('genericName', genericName.value);
-    medicationList.innerHTML = '';
-    meds.forEach(med => {
-        const li = document.createElement('li');
-        const button = document.createElement('button');
-        li.appendChild(button);
-        button.id = med.productId;
-        button.innerText = `${med.brandName ?? ''} | ${med.genericName} | ${med.dosageForm} | ${med.route}`;
-        button.addEventListener('click', selectMedication)
-        medicationList.appendChild(li);
-    })
+    try {
+        e.preventDefault();
+        // TODO: validate brandname, dosageform, route, genericname
+        let meds;
+        if(brandName.value) meds = await searchMedications('brandName', validateSearch(brandName.value));
+        if(dosageForm.value) meds = await searchMedications('dosageForm', validateSearch(dosageForm.value));
+        if(route.value) meds = await searchMedications('route', validateSearch(route.value));
+        if(genericName.value) meds = await searchMedications('genericName', validateSearch(genericName.value));
+        medicationList.innerHTML = '';
+        meds.forEach(med => {
+            const li = document.createElement('li');
+            const button = document.createElement('button');
+            li.appendChild(button);
+            button.id = med.productId;
+            button.innerText = `${med.brandName ?? ''} | ${med.genericName} | ${med.dosageForm} | ${med.route}`;
+            button.addEventListener('click', selectMedication)
+            medicationList.appendChild(li);
+        })
+    } catch(err) {
+        error(err.error);
+    }
 })

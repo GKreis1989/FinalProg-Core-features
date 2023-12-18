@@ -15,13 +15,11 @@ const header = $id('header');
 let modeLogin = true;
 
 const requestLogin = async () => {
-    validateEmail(emailAddressInput.value);
-    validatePassword(passwordInput.value);
     const authResponse = await fetch("/user/login", {
         "method": "POST",
         "body": JSON.stringify({
-            "emailAddress": emailAddressInput.value,
-            "password": passwordInput.value
+            "emailAddress": validateEmail(emailAddressInput.value),
+            "password": validatePassword(passwordInput.value)
         }),
         "headers": {
             "content-type": "application/json"
@@ -34,11 +32,11 @@ const requestRegister = async () => {
     const authResponse = await fetch("/user", {
         "method": "POST",
         "body": JSON.stringify({
-            "emailAddress": emailAddressInput.value,
-            "role": roleInput.value,
-            "password": passwordInput.value,
-            "firstName": firstNameInput.value,
-            "lastName": lastNameInput.value
+            "emailAddress": validateEmail(emailAddressInput.value),
+            "role": validateRole(roleInput.value),
+            "password": validatePassword(passwordInput.value),
+            "firstName": validateFirstName(firstNameInput.value),
+            "lastName": validateLastName(lastNameInput.value)
         }),
         "headers": {
             "content-type": "application/json"
@@ -48,20 +46,23 @@ const requestRegister = async () => {
 }
 
 const createPatient = async (user) => {
-    // TODO: input validation
-    authResponse = await fetch("/patient", {
-        "method": "POST",
-        "body": JSON.stringify({
-            "user": user,
-            "allergies": allergiesInput.value.split(','),
-            "dateOfBirth": dateOfBirthInput.value,
-            "gender": genderInput.value,
-        }),
-        "headers": {
-            "content-type": "application/json"
-        }
-    });
-    return authResponse;
+    try {
+        authResponse = await fetch("/patient", {
+            "method": "POST",
+            "body": JSON.stringify({
+                "user": user,
+                "allergies": validateAllergies(allergiesInput.value.split(',')),
+                "dateOfBirth": validateDateOfBirth(dateOfBirthInput.value),
+                "gender": validateGender(genderInput.value),
+            }),
+            "headers": {
+                "content-type": "application/json"
+            }
+        });
+        return authResponse;
+    } catch(err) {
+        error(err.error);
+    }
 }
 
 loginForm.addEventListener('submit', async (e) => {
@@ -75,6 +76,7 @@ loginForm.addEventListener('submit', async (e) => {
             error(user.error);
         }
     } catch(err) {
+        console.log(err);
         error(err.error);
     }
 })
