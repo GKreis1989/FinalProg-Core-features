@@ -86,7 +86,7 @@ const main = async () => {
       'patient'
     );
     userId = newUser._id;
-    userData.addUserToClinic(userId, 'new clinic');
+    await userData.addUserToClinic(userId, 'new clinic');
     const medicationSearchResults = await medicationData.searchMedications({ "genericName": "ibuprofen" });
     const cachedMedication = await medicationData.cacheMedication(medicationSearchResults[0].productId);
     const medicationId = cachedMedication._id;
@@ -126,7 +126,93 @@ const main = async () => {
   }
 
   console.log();
+  try {
+    const newUser = await userData.createUser(
+      'Chris',
+      'Kehoe',
+      'ckehoe@stevens.edu',
+      'Christest123!',
+      'doctor'
+    );
+    userId = newUser._id;
+    await userData.addUserToClinic(userId, 'new clinic');
+  } catch(e) {
+    if(e instanceof CustomException) {
+      console.log(e.code, e.message);
+    }
+    else console.log(e);
+  }
 
+  console.log();
+
+  try {
+    const newUser = await userData.createUser(
+      'Mike',
+      'Tyson',
+      'mtyson@stevens.edu',
+      'Mtysonstest123!',
+      'admin'
+    );
+    userId = newUser._id;
+    await createClinic('Mikes Clinic');
+    await userData.addUserToClinic(userId, 'Mikes Clinic');
+  } catch(e) {
+    if(e instanceof CustomException) {
+      console.log(e.code, e.message);
+    }
+    else console.log(e);
+  }
+
+  try {
+    const newUser = await userData.createUser(
+      'Susy',
+      'Queue',
+      'squeue@stevens.edu',
+      'Testpassword!123',
+      'medical professional'
+    );
+    userId = newUser._id;
+    await userData.addUserToClinic(userId, 'Mikes Clinic');
+  } catch(e) {
+    if(e instanceof CustomException) {
+      console.log(e.code, e.message);
+    }
+    else console.log(e);
+  }
+
+  try {
+    const newUser = await userData.createUser(
+      'Doctor',
+      'Who',
+      'dwho@stevens.edu',
+      'Testpassword!123',
+      'doctor'
+    );
+    userId = newUser._id;
+    await userData.addUserToClinic(userId, 'Mikes Clinic');
+  } catch(e) {
+    if(e instanceof CustomException) {
+      console.log(e.code, e.message);
+    }
+    else console.log(e);
+  }
+
+  try {
+    const newUser = await userData.createUser(
+      'Test',
+      'User',
+      'tuser@stevens.edu',
+      'Testpassword!123',
+      'admin'
+    );
+    userId = newUser._id;
+    await userData.addUserToClinic(userId, 'new clinic');
+  } catch(e) {
+    if(e instanceof CustomException) {
+      console.log(e.code, e.message);
+    }
+    else console.log(e);
+  }
 }
 
 await main();
