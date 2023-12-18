@@ -126,6 +126,91 @@ const main = async () => {
   }
 
   console.log();
+ try {
+    const newUser = await userData.createUser(
+      'Chris',
+      'Kehoe',
+      'ckehoe@stevens.edu',
+      'Christest123!',
+      'Doctor'
+    );
+    userId = newUser._id;
+    userData.addUserToClinic(userId, 'new clinic');
+  } catch(e) {
+    if(e instanceof CustomException) {
+      console.log(e.code, e.message);
+    }
+    else console.log(e);
+  }
+
+  console.log();
+
+  try {
+    const newUser = await userData.createUser(
+      'Mike',
+      'Tyson',
+      'mtyson@stevens.edu',
+      'mtysonstest123!',
+      'Admin'
+    );
+    userId = newUser._id;
+    await createClinic('Mikes Clinic');
+    userData.addUserToClinic(userId, 'Mikes Clinic');
+  } catch(e) {
+    if(e instanceof CustomException) {
+      console.log(e.code, e.message);
+    }
+    else console.log(e);
+  }
+
+  try {
+    const newUser = await userData.createUser(
+      'Susy',
+      'Queue',
+      'squeue@stevens.edu',
+      'testpassword!123',
+      'Medical Professional'
+    );
+    userId = newUser._id;
+    userData.addUserToClinic(userId, 'Mikes Clinic');
+  } catch(e) {
+    if(e instanceof CustomException) {
+      console.log(e.code, e.message);
+    }
+    else console.log(e);
+  }
+
+  try {
+    const newUser = await userData.createUser(
+      'Doctor',
+      'Who',
+      'dwho@stevens.edu',
+      'Doctor'
+    );
+    userId = newUser._id;
+    userData.addUserToClinic(userId, 'Mikes Clinic');
+  } catch(e) {
+    if(e instanceof CustomException) {
+      console.log(e.code, e.message);
+    }
+    else console.log(e);
+  }
+
+  try {
+    const newUser = await userData.createUser(
+      'Test',
+      'User',
+      'tuser@stevens.edu',
+      'Admin'
+    );
+    userId = newUser._id;
+    userData.addUserToClinic(userId, 'new clinic');
+  } catch(e) {
+    if(e instanceof CustomException) {
+      console.log(e.code, e.message);
+    }
+    else console.log(e);
+  }
 
 }
 
