@@ -48,21 +48,32 @@ const requestRegister = async () => {
 }
 
 const createPatient = async (user) => {
-    // TODO: input validation
-    authResponse = await fetch("/patient", {
-        "method": "POST",
-        "body": JSON.stringify({
-            "user": user,
-            "allergies": allergiesInput.value.split(','),
-            "dateOfBirth": dateOfBirthInput.value,
-            "gender": genderInput.value,
-        }),
-        "headers": {
-            "content-type": "application/json"
-        }
-    });
-    return authResponse;
-}
+    try {
+        const validatedPatientData = validatePatient({
+            dateOfBirth: dateOfBirthInput.value,
+            gender: genderInput.value,
+            allergies: allergiesInput.value.split(','),
+        });
+
+        authResponse = await fetch("/patient", {
+            method: "POST",
+            "body": JSON.stringify({
+                "user": user,
+                "dateOfBirth": validatedPatientData.dateOfBirth,
+                "gender": validatedPatientData.gender,
+                "allergies": validatedPatientData.allergies,
+            }),
+            headers: {
+                "content-type": "application/json"
+            }
+        });
+
+        return authResponse;
+    } catch (error) {
+        error(error.message);
+        return null; 
+    }
+};
 
 loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
