@@ -29,6 +29,7 @@ const requestLogin = async () => {
 }
 
 const requestRegister = async () => {
+    if(passwordInput.value !== confirmPasswordInput.value) throw { error: 'passwords must match' };
     const authResponse = await fetch("/user", {
         "method": "POST",
         "body": JSON.stringify({
