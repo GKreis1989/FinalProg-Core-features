@@ -117,3 +117,12 @@ const validatePatient = (patient) => {
 
   return prescription;
 };
+const validateSearch = (input) => {
+  const trimmedInput = input.trim();
+  const maxLength = 200;
+  if (trimmedInput.length > maxLength) {
+      throw new Error(`Input length exceeds the limit`);
+  }
+
+  return trimmedInput;
+};
