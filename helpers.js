@@ -231,21 +231,24 @@ export const validatePrescription = (prescription) => {
 
 
 export const validateUpdatePatient = (updatePatientParams) => {
+  if (!patient || typeof patient !== 'object') {
+    throw CustomException.badParameter('Invalid patient object');
+  }
+  if ((patient.hasOwnProperty('dateOfBirth')) && new Date(patient.dateOfBirth) >= new Date()) {
+    throw CustomException.badParameter('Invalid or missing dateOfBirth');
+  }
+  if ((patient.hasOwnProperty('gender')) && typeof patient.gender !== 'string') {
+    throw CustomException.badParameter('Invalid or missing gender');
+  }
+  if ((patient.hasOwnProperty('allergies')) && !Array.isArray(patient.allergies)) {
+    throw CustomException.badParameter('Invalid or missing allergies');
+  }
   return updatePatientParams;
 }
 
 
 
 export const authenticateUser = (request) => {
-  if(process.env.TESTING === 'TRUE') {
-    return {
-      firstName: 'patrick',
-      lastName: 'hill',
-      emailAddress: 'phill@stevens.edu',
-      role: 'admin',
-      associatedClinics: []
-    };
-  }
 
   if(request?.session?.user.hasOwnProperty('role')) {
     return request.session.user;
