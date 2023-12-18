@@ -34,7 +34,10 @@ const selectMedication = async (e) => {
 
 searchForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    // TODO: validate brandname, dosageform, route, genericname
+    validateSearch(brandName.value);
+    validateSearch(dosageForm.value);
+    validateSearch(route.value);
+    validateSearch(genericName.value);
     let meds;
     if(brandName.value) meds = await searchMedications('brandName', brandName.value);
     if(dosageForm.value) meds = await searchMedications('dosageForm', dosageForm.value);
